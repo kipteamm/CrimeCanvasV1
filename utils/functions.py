@@ -1,4 +1,7 @@
+from django.http import HttpRequest
 from django.urls import resolve
+
+from authentication import models
 
 from hashlib import sha512
 
@@ -22,3 +25,7 @@ def path_exists(path: str) -> bool:
         return True
     except:
         return False
+    
+
+def logged_in(request: HttpRequest) -> bool:
+    return models.User.objects.filter(token=request.COOKIES.get('au_id')).exists()

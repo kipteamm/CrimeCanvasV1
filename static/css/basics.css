@@ -1,0 +1,28 @@
+:root {
+    --primary-bg: #f7f8f9;
+    --secondary-bg: #dcdfe4;
+    --tertiary-bg: #b3b9c4;
+
+    --primary-font: 'Comfortaa-Light';
+    --primary-font-clr: #172b4d;
+
+    --pdd: 25px;
+    --rad: 12.5px;
+}
+
+@font-face {
+    font-family: 'Comfortaa-Light';
+    src: url('/static/font/Comfortaa-Light.ttf');
+}
+
+body {
+    margin: 0;
+    background-color: var(--primary-bg);
+    color: var(--primary-font-clr);
+    font-family: var(--primary-font);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-font-clr)
+}

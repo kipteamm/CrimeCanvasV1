@@ -57,12 +57,12 @@ def login(request):
         if functions.path_exists(request.GET.get('next')):
             next_page = request.GET.get('next')
         else:
-            next_page = '/classes'
+            next_page = '/'
 
         if functions.sha256(f"{user.salt}${password}") != user.password: # type: ignore
             messages.error(request, "Invalid password")
 
-            if next_page != '/classes':
+            if next_page != '/':
                 return redirect(f'/login?next={next_page}')
         
             return redirect('/login')
