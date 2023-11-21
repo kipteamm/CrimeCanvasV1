@@ -1,13 +1,19 @@
 nav {
+    position: fixed;
+    z-index: 10;
+    top: var(--pdd);
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     width: 700px;
-    margin: var(--pdd) auto;
     padding: var(--pdd);
-    border: 2px solid var(--secondary-bg);
+    border: var(--brd) solid var(--secondary-bg);
     font-size: 1em;
     border-radius: var(--rad);
+    background-color: var(--primary-bg);
 }
 
+/* NAVBAR */
 nav .left {
     flex: 1;
 }
@@ -25,7 +31,6 @@ nav a:hover,
 nav i:hover {
     cursor: pointer;
 }
-
 
 nav a:not(:last-child),
 nav i:not(:last-child) {
@@ -57,4 +62,45 @@ nav i:not(:last-child) {
 
 nav .account:hover ~ .account-dropdown {
     transform: scale(1);
+}
+
+/* SEARCH */
+.search {
+    margin-bottom: calc(var(--pdd) * 2);
+    position: relative;
+}
+
+.search input.primary {
+    padding: var(--pdd);
+    width: calc(100% - var(--pdd) * 2 - var(--brd) * 2);
+    border-radius: calc(var(--rad) * 2);
+} 
+
+.search i {
+    position: absolute;
+    right: var(--pdd);
+    top: calc(var(--pdd) + var(--brd));
+}
+.search i:hover {
+    cursor: pointer;
+}
+
+/* BANNER */
+.banner {
+    padding: calc(var(--pdd) * 2);
+    border-radius: var(--rad);
+    background-color: var(--primary-clr);
+    text-align: center;
+    position: relative;
+}
+.banner i {
+    position: absolute;
+    top: calc(var(--pdd) * .5);
+    right: calc(var(--pdd) * .5);
+    font-size: 1.5em;
+    transition: .3s;
+}
+.banner i:hover {
+    cursor: pointer;
+    transform: rotate(180deg);
 }

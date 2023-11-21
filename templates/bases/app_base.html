@@ -19,38 +19,53 @@
     <script src="https://kit.fontawesome.com/6996113341.js" crossorigin="anonymous"></script>
 </head>
 <body> 
-
-    <nav>
-        <div class="left">
-            <a onclick="loadObjects('all')">All</a>
-            <a onclick="loadObjects('testing')">Testing</a>
-            <a onclick="loadAbout()">About</a>
-        </div>
-
-        <div class="right">
-            <div class="account-wrapper">
-                <i class="account fa-regular fa-circle-user"></i>
-
-                <div class="dropdown account-dropdown">
-                    {% if logged_in %}
-                        <a onclick="loadObjects('mine')">My content</a>
-                        <a href="/logout">Logout</a>
-                    {% else %}
-                        <a href="/login">Login</a>
-                    {% endif %}
-                </div>
+    <div class="wrapper">
+        <nav>
+            <div class="left">
+                <a onclick="loadObjects('all')">Home</a>
+                <a onclick="loadObjects('testing')">Testing</a>
+                <a onclick="loadAbout()">About</a>
             </div>
 
-            <div class="account-wrapper">
-                <i class="cart fa-solid fa-cart-shopping"></i>
+            <div class="right">
+                <div class="account-wrapper">
+                    <i class="account fa-regular fa-circle-user"></i>
 
-                <div class="dropdown cart-dropdown">
-                    Stuff I am buying
+                    <div class="dropdown account-dropdown">
+                        {% if logged_in %}
+                            <a onclick="loadObjects('mine')">My content</a>
+                            <a href="/logout">Logout</a>
+                        {% else %}
+                            <a href="/login">Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="account-wrapper">
+                    <i class="cart fa-solid fa-cart-shopping"></i>
+
+                    <div class="dropdown cart-dropdown">
+                        Stuff I am buying
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    {% block content %}{% endblock %}
+        <div class="header">
+            <div class="content">
+                <div class="search">
+                    <input class="primary" type="text" placeholder="Search...">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+
+                {% block header %}{% endblock %}
+            </div>
+        </div>
+        <div class="page">
+            <div class="content">
+                {% block page_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
 </body>
 </html>
