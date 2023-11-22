@@ -1,8 +1,7 @@
 :root {
     --primary-bg: #f7f8f9;
     --secondary-bg: #dcdfe4;
-    --tertiary-bg: #b3b9c4;
-    --quaternary-bg: #707a8b;
+    --tertiary-bg: #172b4d;
 
     --primary-clr: #e5dbff;
     --secondary-clr: #efe965;
@@ -41,7 +40,11 @@ p {
 .content {
     width: 1100px;
     margin: 0px auto;
-    padding: calc(var(--pdd) * 2) 0px;
+    padding: calc(var(--pdd) * 3) 0px;
+}
+
+.page-content {
+    min-height: 500px;
 }
 
 .header {
@@ -52,6 +55,12 @@ p {
     background-color: var(--secondary-bg);
 }
 
+footer {
+    background-color: var(--tertiary-bg);
+    padding: calc(var(--pdd) * 3);
+    color: var(--secondary-font-clr);
+}
+
 /* COMPONENTS */
 button,
 input {
@@ -60,6 +69,13 @@ input {
     border-radius: var(--rad);
     font-size: 16px;
     outline: none;
+}
+
+button {
+    border: none;
+}
+button i {
+    margin-left: calc(var(--pdd) / 2);
 }
 
 button:hover,

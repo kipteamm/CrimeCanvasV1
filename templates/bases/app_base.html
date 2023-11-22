@@ -32,49 +32,44 @@
             </div>
 
             <div class="right">
-                <div class="account-wrapper">
-                    <i class="account fa-regular fa-circle-user"></i>
-
-                    <div class="dropdown account-dropdown">
+                <div class="options-wrapper">
+                    <div class="options">
                         {% if logged_in %}
-                            <a onclick="loadObjects('mine')">My content</a>
-                            <a onclick="loadObjects('mine')">My favourites</a>
-                            <a href="/logout">Logout</a>
+                            <i class="fa-solid fa-list"></i>
+                            <i class="fa-solid fa-heart"></i>
+                            <i class="fa-solid fa-gear"></i>
                         {% else %}
                             <a href="/login">Login</a>
                         {% endif %}
                     </div>
+
+                    <i onclick="this.parentNode.querySelector('.options').classList.toggle('active')" class="fa-regular fa-circle-user"></i>
                 </div>
 
-                <div class="account-wrapper">
-                    <i class="cart fa-solid fa-cart-shopping"></i>
-
-                    <div class="dropdown cart-dropdown">
-                        Stuff I am buying
-                    </div>
-                </div>
+                <i class="fa-solid fa-cart-shopping"></i>
             </div>
         </nav>
 
         <div class="header">
             <div class="content">
-                <div class="search">
-                    <input class="primary" type="text" placeholder="Search...">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-
                 {% block header %}{% endblock %}
             </div>
         </div>
         <div class="page">
+            <!--
             <div class="content">
                 <i class="fa-solid fa-users"></i>
                 <i class="fa-solid fa-clock"></i>
             </div>
+            -->
             <div class="page-content content">
                 {% block page_content %}{% endblock %}
             </div>
         </div>
     </div>
+
+    <footer>
+        © No name yet 2023
+    </footer>
 </body>
 </html>
