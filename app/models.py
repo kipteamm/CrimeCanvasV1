@@ -8,6 +8,8 @@ import json
 
 
 class Review(models.Model):
+    id = snowflakes.SnowflakeIDField(primary_key=True, unique=True)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     story = models.IntegerField(default=1)

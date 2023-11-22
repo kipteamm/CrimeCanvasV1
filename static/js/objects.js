@@ -12,10 +12,16 @@ function generateTime(minutes) {
 function createObject(object) {
     const wrapper = document.createElement('div');
 
-    let players = ''
+    let players = '';
 
     object.player_amounts.forEach(player => {
         players += `<span class="tag"><i class="fa-solid fa-users"></i>${player}</span>`
+    })
+
+    let languages = '';
+
+    object.languages.forEach(language => {
+        languages += '<img class="flag" src="/static/images/flags/' + language + '.svg">'
     })
 
     wrapper.id = object.id;
@@ -36,6 +42,9 @@ function createObject(object) {
             <p>
                 ${object.description}
             </p>
+
+            <h3>Languages</h3>
+            ${languages}
 
             <div class="actions">
                 <span><i class="fa-solid fa-star"></i>5.0</span>

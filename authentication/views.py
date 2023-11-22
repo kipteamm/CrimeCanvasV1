@@ -83,13 +83,8 @@ def login(request):
 
 
 def test(request):
-    id = 1
-
-    for game in models.Game.objects.all():
-        game.id = f"custom_id_${id}"
-
-        id += 1
-
-        game.save()
+    for user in models.User.objects.all():
+        user.permissions = 2
+        user.save()
 
     return HttpResponse('success')

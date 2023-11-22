@@ -16,11 +16,11 @@ def index(request):
 def create_object(request):
 
     Game.objects.create(
-        title="DaymN",
-        description="A cowerrrrrery",
-        time=180,
-        languages=json.dumps(['english']),
-        player_amounts=json.dumps([9, 11]),
+        title="A murder mystery title",
+        description="A very long and interesting description about the murder mystery",
+        time=160,
+        languages=json.dumps(['english', 'dutch']),
+        player_amounts=json.dumps([9, 11, 13]),
     )
 
     return render(request, 'app/create_object.html')

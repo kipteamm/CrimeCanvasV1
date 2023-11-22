@@ -164,7 +164,7 @@ nav .account:hover ~ .account-dropdown {
     margin-top: var(--pdd);
 }
 
-.object img {
+.object img.object-banner {
     height: 100%;
     max-width: 100%;
     object-fit: cover;
@@ -182,6 +182,18 @@ nav .account:hover ~ .account-dropdown {
 
 .object h2 {
     margin-top: 0px; 
+}
+
+.object h3 {
+    margin-bottom: calc(var(--pdd) / 4);
+}
+
+.object img.flag {
+    width: var(--pdd);
+    margin-bottom: calc(var(--pdd) / 2)
+}
+.object img.flag:not(:last-child) {
+    margin-right: calc(var(--pdd) / 2)
 }
 
 .object .actions span {
