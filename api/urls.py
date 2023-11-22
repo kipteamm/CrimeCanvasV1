@@ -5,4 +5,5 @@ from .views import *
 
 urlpatterns = [
     path('objects/<str:page>', get_objects, name='get_objects'),
+    path('object/<str:id>', get_object, name='get_object'),
 ]

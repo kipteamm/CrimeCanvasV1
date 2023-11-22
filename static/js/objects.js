@@ -26,6 +26,7 @@ function createObject(object) {
 
     wrapper.id = object.id;
     wrapper.classList.add('object')
+    wrapper.setAttribute('onclick', `viewObject('${object.id}')`)
     wrapper.innerHTML = `
         <div class="top">
             <img class="object-banner" src="/static/game/${object.id}/banner.jpg">
@@ -61,4 +62,40 @@ function getObjects(objectPage) {
             content.appendChild(createObject(object))
         });
     });
+}
+
+const preview = document.querySelector('.object-preview');
+const overlay = document.querySelector('.dark-overlay');
+
+async function viewObject(objectID) {
+    preview.style.bottom = '0';
+
+    overlay.classList.add('active')
+
+    document.body.style.overflowY = 'hidden';
+
+    const response = await fetch(`/api/object/${objectID}`)
+
+    if (!response.ok) {
+        return
+    }
+
+    const object = await response.json()
+
+    preview.querySelector('.object-banner').src = `/static/game/${object.id}/banner.jpg`
+
+    preview.querySelector('.object-content').innerHTML = `
+        <h1>${object.title}</h1>
+        <p>${object.description}</p>
+    `
+
+    preview.querySelector('.object-actions').innerHTML = `
+        quick test
+    `
+}
+
+function closePreview() {
+    preview.style.bottom = '-100vh';
+    overlay.classList.remove('active')
+    document.body.style.overflowY = 'scroll'
 }

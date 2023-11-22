@@ -1,6 +1,6 @@
 nav {
     position: fixed;
-    z-index: 10;
+    z-index: 2;
     top: var(--pdd);
     left: 50%;
     transform: translateX(-50%);
@@ -212,4 +212,58 @@ nav i.fa-circle-user {
 
 .object .actions i.fa-heart:hover {
     font-weight: 900;
+}
+
+/* OBJECT PREVIEW */
+.dark-overlay {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    background-color: black;
+    transition: .3s;
+}
+.dark-overlay.active {
+    opacity: .5;
+    pointer-events: all;
+}
+
+.object-preview {
+    position: fixed;
+    height: 80vh;
+    width: 60vw;
+    margin: 0 20vw;
+    bottom: -100vh;
+    transition: .3s;
+    background-color: var(--primary-bg);
+    z-index: 11;
+    border-radius: var(--rad) var(--rad) 0px 0px;
+}
+
+.object-preview h1 {
+    margin-top: 0px;   
+}
+
+.object-preview img.object-banner {
+    border-radius: var(--rad) var(--rad) 0px 0px;
+    width: 100%;
+    max-height: 35vh;
+    object-fit: cover;
+}
+
+.preview-content {
+    display: flex;
+    padding: calc(var(--pdd) * 2);
+}
+
+.object-content {
+    flex: 70%
+}
+.object-actions {
+    flex: 30%;
+    margin: calc(var(--pdd) * -5) calc(var(--pdd) * -2) 0px 0px;
+    background-color: var(--primary-bg);
 }

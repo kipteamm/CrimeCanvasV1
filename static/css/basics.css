@@ -4,8 +4,7 @@
     --tertiary-bg: #172b4d;
 
     --primary-clr: #e5dbff;
-    --secondary-clr: #efe965;
-    --tertiary-clr: #e25a5a;
+    --secondary-clr: #fbf77a;
 
     --primary-font: 'Comfortaa-Light';
     --primary-font-clr: #172b4d;
@@ -85,7 +84,6 @@ input:hover {
 
 button.primary {
     background-color: var(--secondary-clr);
-    border: var(--brd) solid var(--secondary-bg);
     color: var(--primary-font-clr);
 }
 
