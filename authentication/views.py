@@ -3,6 +3,8 @@ from django.contrib import messages
 
 from authentication import models
 
+from app import models
+
 from utils import functions 
 
 import time
@@ -81,9 +83,13 @@ def login(request):
 
 
 def test(request):
-    user = models.User.objects.get(email_address='toro.een@gmail.com')
+    id = 1
 
-    user.permissions = 2
-    user.save()
+    for game in models.Game.objects.all():
+        game.id = f"custom_id_${id}"
+
+        id += 1
+
+        game.save()
 
     return HttpResponse('success')

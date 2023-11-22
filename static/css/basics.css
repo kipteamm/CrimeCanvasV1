@@ -2,9 +2,11 @@
     --primary-bg: #f7f8f9;
     --secondary-bg: #dcdfe4;
     --tertiary-bg: #b3b9c4;
+    --quaternary-bg: #707a8b;
 
     --primary-clr: #e5dbff;
-    --secondary-clr: #ffd43b;
+    --secondary-clr: #efe965;
+    --tertiary-clr: #e25a5a;
 
     --primary-font: 'Comfortaa-Light';
     --primary-font-clr: #172b4d;
@@ -47,14 +49,33 @@ a {
 }
 
 /* COMPONENTS */
-button.primary,
-input.primary {
-    background-color: var(--primary-bg);
-    border: var(--brd) solid var(--secondary-bg);
+button,
+input {
     font-family: var(--primary-font);
-    color: var(--primary-font-clr);
     padding: calc(var(--pdd) / 2);
     border-radius: var(--rad);
     font-size: 16px;
     outline: none;
+}
+
+button:hover,
+input:hover {
+    cursor: pointer;
+}
+
+button.primary {
+    background-color: var(--secondary-clr);
+    border: var(--brd) solid var(--secondary-bg);
+    color: var(--primary-font-clr);
+}
+
+input.primary {
+    background-color: var(--primary-bg);
+    border: var(--brd) solid var(--secondary-bg);
+    color: var(--primary-font-clr);
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 0px;
 }

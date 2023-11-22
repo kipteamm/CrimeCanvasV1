@@ -2,6 +2,8 @@ from django.db import models
 
 from authentication.models import User
 
+from utils import snowflakes
+
 import json
 
 
@@ -19,6 +21,8 @@ class Review(models.Model):
 
 
 class Game(models.Model):
+    id = snowflakes.SnowflakeIDField(primary_key=True, unique=True)
+
     title = models.CharField(max_length=256)
     description = models.TextField(max_length=5000)
 
@@ -38,6 +42,7 @@ class Game(models.Model):
             reviews.append(review.to_dict())
 
         return {
+            'id' : self.id,
             'title' : self.title,
             'description' : self.description,
             'time' : self.time,

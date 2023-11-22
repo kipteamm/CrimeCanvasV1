@@ -1,9 +1,9 @@
-const content = document.querySelector('.page').querySelector('.content');
+const content = document.querySelector('.page').querySelector('.page-content');
 const header = document.querySelector('.header').querySelector('.content');
 
 let page;
 
-function newPage(pageName) {
+function updatePage(pageName) {
     page = pageName
 
     let newURL = `${window.location.protocol}//${window.location.host}${window.location.pathname}?p=${page}`
@@ -11,34 +11,32 @@ function newPage(pageName) {
     window.history.pushState({path : newURL}, '', newURL);
 }
 
-function loadAbout() {
+async function loadComponent(componentPath) {
+    const response = await fetch(`/static/components/${componentPath}.html`);
+
+    return await response.text();
+}
+
+async function loadAbout() {
     if (page === "about") {
         return
     }
 
-    newPage("about");
+    header.innerHTML = await loadComponent('about/header')
+    content.innerHTML = await loadComponent('about/content')
 
-    fetch('/static/components/about/header.html').then(res => res.text()).then(text => {
-        header.innerHTML = text;
-    });
-
-    fetch('/static/components/about/content.html').then(res => res.text()).then(text => {
-        content.innerHTML = text;
-    });
+    updatePage("about")
 }
 
-function loadObjects(objectPage) {
+async function loadObjects(objectPage) {
     if (page === objectPage) {
         return
     }
 
-    fetch('/static/components/objects/header.html').then(res => res.text()).then(text => {
-        header.innerHTML = text;
-    });
-    
+    header.innerHTML = await loadComponent(`objects/${objectPage}_header`)
     content.innerHTML = '';
 
-    newPage(objectPage)
+    updatePage(objectPage)
 
     getObjects(objectPage)
 }
@@ -49,7 +47,7 @@ window.addEventListener('load', () => {
     if (page === "" || page === null) {
         loadObjects('all')
     } else if (page === "about") {
-        loadAbout
+        loadAbout()
     } else {
         loadObjects(page)
     }

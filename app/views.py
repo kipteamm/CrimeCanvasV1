@@ -16,8 +16,8 @@ def index(request):
 def create_object(request):
 
     Game.objects.create(
-        title="Another test",
-        description="A cool game set in 1935",
+        title="DaymN",
+        description="A cowerrrrrery",
         time=180,
         languages=json.dumps(['english']),
         player_amounts=json.dumps([9, 11]),

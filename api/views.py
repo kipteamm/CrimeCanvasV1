@@ -4,7 +4,10 @@ from app import models
 
 
 def get_objects(request, page):
-    games = models.Game.objects.all()
+    if page == "testing":
+        games = models.Game.objects.filter(tested=False)
+    else:
+        games = models.Game.objects.filter(tested=True)
 
     objects = []
 

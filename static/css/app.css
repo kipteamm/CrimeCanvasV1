@@ -93,14 +93,114 @@ nav .account:hover ~ .account-dropdown {
     text-align: center;
     position: relative;
 }
-.banner i {
+.banner i.close {
     position: absolute;
     top: calc(var(--pdd) * .5);
     right: calc(var(--pdd) * .5);
     font-size: 1.5em;
     transition: .3s;
 }
-.banner i:hover {
+.banner i.close:hover {
     cursor: pointer;
     transform: rotate(180deg);
+}
+
+/* OBJECTS */
+.page .page-content {
+    padding-top: 0px;
+    display: flex;
+    gap: var(--pdd);
+    flex-wrap: wrap;
+}
+
+.object {
+    flex: 0 0 calc(33.333% - var(--pdd));
+    background-color: var(--primary-bg);
+    padding: var(--pdd);
+    border-radius: var(--rad);
+    box-sizing: border-box;
+    transition: .3s;
+}
+
+.object:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.object .top {
+    margin: calc(var(--pdd) * -1) calc(var(--pdd) * -1) 0px calc(var(--pdd) * -1);
+    position: relative;
+    height: calc(var(--pdd) * 10);
+}
+
+.object .tags {
+    position: absolute;
+    left: calc(var(--pdd) / 2);
+    bottom: calc(var(--pdd) / 2);
+    width: calc(100% - var(--pdd));
+    text-align: center;
+}
+
+.object .tag {
+    padding: calc(var(--pdd) / 4) calc(var(--pdd) / 2);
+    background-color: var(--primary-clr);
+    transition: .3s;
+    display: inline-block;
+    border-radius: var(--rad);
+}
+.object .tag:not(:last-child) {
+    margin-right: calc(var(--pdd) / 4)
+}
+.object .tag:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+}
+
+.object .tag i {
+    margin-right: calc(var(--pdd) / 3);
+}
+
+.object .bottom {
+    margin-top: var(--pdd);
+}
+
+.object img {
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: var(--rad) var(--rad) 0px 0px;
+}
+.object .image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.5) 50%, rgba(0, 0, 0, 0));
+    pointer-events: none;  /* Allow clicking through the overlay to the image */
+}
+
+.object h2 {
+    margin-top: 0px; 
+}
+
+.object .actions span {
+    padding: calc(var(--pdd) / 4) calc(var(--pdd) / 2);
+    background-color: var(--secondary-bg);
+    border-radius: var(--rad);
+}
+
+.object .actions span:first-child i {
+    margin-right: calc(var(--pdd) / 4);
+}
+.object .actions span:last-child {
+    float: right;
+}
+
+.object .actins i {
+    transition: .3s;
+}
+
+.object .actions i.fa-heart:hover {
+    font-weight: 900;
 }
