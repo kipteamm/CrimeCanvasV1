@@ -1,3 +1,18 @@
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+
+    return null;
+}
+
 function generateTime(minutes) {
     const hours = `${Math.floor(minutes / 60)}h`;
     const remainingMinutes = ` ${minutes % 60}m`;
@@ -56,11 +71,33 @@ function createObject(object) {
     return wrapper
 }
 
-function getObjects(objectPage) {
-    fetch(`/api/objects/${objectPage}`).then(res => res.json()).then(json => {
-        json.objects.forEach(object => {
-            content.appendChild(createObject(object))
+async function getFromApi(url) {
+    let response;
+
+    if (getCookie("au_id") !== null) {
+        response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: getCookie("au_id"),
+            },
         });
+    } else {
+        response = await fetch(url)
+    }
+
+    if (!response.ok) {
+        return
+    }
+
+    return await response.json()
+}
+
+async function getObjects(objectPage) {
+    const objects = await getFromApi(`/api/objects/${objectPage}`)
+
+    objects.objects.forEach(object => {
+        content.appendChild(createObject(object))
     });
 }
 
@@ -82,13 +119,7 @@ async function viewObject(objectID) {
 
     currentObject = objectID
 
-    const response = await fetch(`/api/object/${objectID}`)
-
-    if (!response.ok) {
-        return
-    }
-
-    const object = await response.json()
+    const object = await getFromApi(`/api/object/${objectID}`)
 
     preview.querySelector('.object-banner').src = `/static/game/${object.id}/banner.jpg`
 

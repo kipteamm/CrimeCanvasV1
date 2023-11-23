@@ -90,6 +90,7 @@ nav i.fa-circle-user {
     text-align: center;
     position: relative;
 }
+
 .banner i.close {
     position: absolute;
     top: calc(var(--pdd) * .5);
@@ -100,6 +101,18 @@ nav i.fa-circle-user {
 .banner i.close:hover {
     cursor: pointer;
     transform: rotate(180deg);
+}
+
+.banner h1 {
+    margin-top: 0px;
+}
+
+.banner p {
+    margin-bottom: 0px;
+}
+
+.banner button {
+    margin-top: var(--pdd);
 }
 
 /* OBJECTS */

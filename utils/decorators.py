@@ -1,7 +1,7 @@
 # decorators.py
 
 from django.shortcuts import redirect
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 
 from authentication import models
 
@@ -30,6 +30,29 @@ def logged_in(required_permission: int = 1):
 
                 return redirect(f'/login{next_url}')
 
+        return _wrapped_view
+
+    return decorator
+
+
+def authenticated(required: bool=True):
+    def decorator(view_func):
+        def _wrapped_view(request: HttpRequest, *args, **kwargs):
+            
+            token = request.META.get('HTTP_AUTHENTICATION')
+
+            if not token and required:
+                return JsonResponse({'error' : 'No authentication token provided.'}, status=401)
+
+            user = models.User.objects.filter(token=token)
+
+            if not user.exists() and required:
+                return JsonResponse({'error' : 'No authentication token provided.'}, status=401)
+            
+            request.user = user # type: ignore
+
+            return view_func(request, *args, **kwargs)
+        
         return _wrapped_view
 
     return decorator

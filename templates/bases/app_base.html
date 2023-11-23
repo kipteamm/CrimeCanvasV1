@@ -35,9 +35,9 @@
                 <div class="options-wrapper">
                     <div class="options">
                         {% if logged_in %}
-                            <i class="fa-solid fa-list"></i>
-                            <i class="fa-solid fa-heart"></i>
-                            <i class="fa-solid fa-gear"></i>
+                            <i class="fa-solid fa-list" onclick="loadObjects('collection')"></i>
+                            <i class="fa-solid fa-heart" onclick="loadObjects('wishlist')"></i>
+                            <i class="fa-solid fa-gear" onclick="loadSettings()"></i>
                         {% else %}
                             <a href="/login">Login</a>
                         {% endif %}

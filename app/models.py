@@ -1,7 +1,5 @@
 from django.db import models
 
-from authentication.models import User
-
 from utils import snowflakes
 
 import json
@@ -10,7 +8,7 @@ import json
 class Review(models.Model):
     id = snowflakes.SnowflakeIDField(primary_key=True, unique=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE)
 
     story = models.IntegerField(default=1)
     fun = models.IntegerField(default=1)

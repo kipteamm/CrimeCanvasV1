@@ -1,9 +1,12 @@
 from django.core.cache import cache
 from django.http import JsonResponse
 
+from utils import decorators
+
 from app import models
 
 
+@decorators.authenticated(required=False)
 def get_objects(request, page):
     cache_key = f'objects_{page}'
 
@@ -11,10 +14,24 @@ def get_objects(request, page):
 
     if cached:
         return JsonResponse(cached)
+    
+    user = request.user
 
     if page == "testing":
         games = models.Game.objects.filter(tested=False)
+    
+    elif page == "wishlist":
+        if not user:
+            return JsonResponse({'error' : 'No authentication token provided.'}, status=401)
         
+        games = user.wishlist.all()
+
+    elif page == "collection": 
+        if not user:
+            return JsonResponse({'error' : 'No authentication token provided.'}, status=401)
+        
+        games = user.collection.all()
+
     else:
         games = models.Game.objects.filter(tested=True)
 
