@@ -37,11 +37,16 @@ class Game(models.Model):
 
     tested = models.BooleanField(default=False)
 
-    def to_dict(self) -> dict:
+    def to_dict(self, user=None) -> dict:
         reviews = []
 
         for review in self.reviews.all():
             reviews.append(review.to_dict())
+
+        wishlisted = False
+
+        if user:
+            wishlisted = user.wishlist.filter(id=self.id).exists()
 
         return {
             'id' : self.id,
@@ -53,4 +58,5 @@ class Game(models.Model):
             'age' : f'{self.age}+',
             'themes' : self.themes,
             'reviews' : reviews,
+            'wishlisted' : wishlisted
         }

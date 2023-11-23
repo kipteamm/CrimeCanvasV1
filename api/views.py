@@ -5,16 +5,11 @@ from utils import decorators
 
 from app import models
 
+import json
+
 
 @decorators.authenticated(required=False)
 def get_objects(request, page):
-    cache_key = f'objects_{page}'
-
-    cached = cache.get(cache_key)
-
-    if cached:
-        return JsonResponse(cached)
-    
     user = request.user
 
     if page == "testing":
@@ -38,25 +33,39 @@ def get_objects(request, page):
     objects = []
 
     for game in games:
-        objects.append(game.to_dict())
-
-    cache.set(cache_key, {'objects' : objects}, timeout=600)
+        objects.append(game.to_dict(user))
 
     return JsonResponse({'objects' : objects})
 
 
+@decorators.authenticated(required=False)
 def get_object(request, id):
-    cache_key = f'object_{id}'
+    game = models.Game.objects.filter(id=id)
 
-    cached = cache.get(cache_key)
+    if not game.exists():
+        return JsonResponse({'error' : 'No game with that id.'}, status=404)
+    
+    game = game.first()
 
-    if cached:
-        return JsonResponse(cached)
-
-    game = models.Game.objects.get(id=id)
-
-    response = game.to_dict()
-
-    cache.set(cache_key, response, timeout=600)
+    response = game.to_dict(request.user) # type: ignore
 
     return JsonResponse(response)
+
+
+@decorators.authenticated()
+def toggle_wishlist(request):
+    game_id = json.loads(request.body.decode('utf-8')).get('id')
+
+    if not game_id:
+        return JsonResponse({'error' : 'No game id provided.'}, status=400)
+    
+    game = models.Game.objects.get(id=game_id)
+    user = request.user
+
+    if user.wishlist.filter(id=game.id).exists():
+        user.wishlist.remove(game)
+    
+    else:
+        user.wishlist.add(game)
+
+    return JsonResponse({'success' : True})

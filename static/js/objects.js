@@ -39,6 +39,12 @@ function createObject(object) {
         languages += '<img class="flag" src="/static/images/flags/' + language + '.svg">'
     })
 
+    isWishlisted = 'regular'
+
+    if (object.wishlisted) {
+        isWishlisted = 'solid'
+    }
+
     wrapper.id = object.id;
     wrapper.classList.add('object')
     wrapper.setAttribute('onclick', `viewObject('${object.id}')`)
@@ -64,7 +70,7 @@ function createObject(object) {
 
             <div class="actions">
                 <span><i class="fa-solid fa-star"></i>5.0</span>
-                <span><i class="fa-regular fa-heart"></i></span>
+                <span><i class="fa-${isWishlisted} fa-heart" onclick="wishlist('${object.id}', false)"></i></span>
         </div>
     `
 
@@ -119,22 +125,22 @@ async function viewObject(objectID) {
 
     currentObject = objectID
 
-    const object = await getFromApi(`/api/object/${objectID}`)
+    const objectData = await getFromApi(`/api/object/${objectID}`)
 
-    preview.querySelector('.object-banner').src = `/static/game/${object.id}/banner.jpg`
+    preview.querySelector('.object-banner').src = `/static/game/${objectData.id}/banner.jpg`
 
     preview.querySelector('.object-content').innerHTML = `
-        <h1>${object.title}</h1>
-        <p>${object.description}</p>
+        <h1>${objectData.title}</h1>
+        <p>${objectData.description}</p>
 
         <h3>Specifications</h3>
         <ul>
             <li>
-                Recommended age: ${object.age}
+                Recommended age: ${objectData.age}
                 <span>The recommended age is based on story difficulty and story themes.</span>
             </li>
-            <li>Average time playing: ${generateTime(object.time)}</li>
-            <li>Themes: ${object.themes.join(', ')}.</li>
+            <li>Average time playing: ${generateTime(objectData.time)}</li>
+            <li>Themes: ${objectData.themes.join(', ')}.</li>
             <li>Includes a full setup guide.</li>
             <li>Includes a set of rules.</li>
             <li>Includes all files needed to set the game up.</li>
@@ -146,11 +152,11 @@ async function viewObject(objectID) {
     let players = '';
     let languages = '';
 
-    object.player_amounts.forEach(player => {
+    objectData.player_amounts.forEach(player => {
         players += generateOption(player, players === '')
     });
 
-    object.languages.forEach(language => {
+    objectData.languages.forEach(language => {
         languages += generateOption(`<img src="/static/images/flags/${language}.svg">`, languages === '')
     });
 
@@ -168,7 +174,7 @@ async function viewObject(objectID) {
         </div>
         
         <button class="primary">Add to cart</button>
-        <button class="secondary">Wishlist</button>
+        <button class="secondary" onclick="wishlist('${objectData.id}', true)">Wishlist</button>
     `
 }
 
@@ -196,4 +202,38 @@ function selectOption(elm) {
     elm.parentNode.querySelector('.active').classList.remove('active')
 
     elm.classList.add('active')
+}
+
+async function wishlist(objectID, preview) {
+    const url = `api/object/toggle-wishlist/`;
+
+    const data = {
+        id : objectID
+    }
+
+    const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": getCookie("au_id"),
+            'X-CSRFToken': document.cookie.match(/csrftoken=([^ ;]+)/)[1],
+        },
+    });
+
+    if (!response.ok) {
+        return
+    }
+
+    const object = document.getElementById(objectID)
+
+    const wishlistIndicator = object.querySelector('.fa-heart')
+
+    if (wishlistIndicator.classList.contains('fa-regular')) {
+        wishlistIndicator.classList.remove('fa-regular')
+        wishlistIndicator.classList.add('fa-solid')
+    } else {
+        wishlistIndicator.classList.remove('fa-solid')
+        wishlistIndicator.classList.add('fa-regular')
+    }
 }

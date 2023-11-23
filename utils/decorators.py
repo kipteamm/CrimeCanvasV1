@@ -39,7 +39,7 @@ def authenticated(required: bool=True):
     def decorator(view_func):
         def _wrapped_view(request: HttpRequest, *args, **kwargs):
             
-            token = request.META.get('HTTP_AUTHENTICATION')
+            token = request.META.get('HTTP_AUTHORIZATION')
 
             if not token and required:
                 return JsonResponse({'error' : 'No authentication token provided.'}, status=401)
@@ -49,7 +49,7 @@ def authenticated(required: bool=True):
             if not user.exists() and required:
                 return JsonResponse({'error' : 'No authentication token provided.'}, status=401)
             
-            request.user = user # type: ignore
+            request.user = user.first() # type: ignore
 
             return view_func(request, *args, **kwargs)
         
