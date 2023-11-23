@@ -101,11 +101,11 @@ async function viewObject(objectID) {
     let languages = '';
 
     object.player_amounts.forEach(player => {
-        players += generateOption(player)
+        players += generateOption(player, players === '')
     });
 
     object.languages.forEach(language => {
-        languages += generateOption(`<img src="/static/images/flags/${language}.svg">`)
+        languages += generateOption(`<img src="/static/images/flags/${language}.svg">`, languages === '')
     });
 
     preview.querySelector('.object-actions').innerHTML = `
@@ -122,6 +122,7 @@ async function viewObject(objectID) {
         </div>
         
         <button class="primary">Add to cart</button>
+        <button class="secondary">Wishlist</button>
     `
 }
 
@@ -131,10 +132,22 @@ function closePreview() {
     document.body.style.overflowY = 'scroll'
 }
 
-function generateOption(option) {
+function generateOption(option, active) {
+    let isActive = ''
+
+    if (active) {
+        isActive = ' active'
+    }
+
     return `
-    <div class="radio-container">
+    <div class="radio-container${isActive}" onclick="selectOption(this)">
         ${option}
     </div>
     `
+}
+
+function selectOption(elm) {
+    elm.parentNode.querySelector('.active').classList.remove('active')
+
+    elm.classList.add('active')
 }

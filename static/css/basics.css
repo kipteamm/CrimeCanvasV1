@@ -90,6 +90,9 @@ button.primary {
     background-color: var(--secondary-clr);
     color: var(--primary-font-clr);
 }
+button.secondary {
+    background-color: var(--secondary-bg);
+}
 
 input.primary {
     background-color: var(--primary-bg);

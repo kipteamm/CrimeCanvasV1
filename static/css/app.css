@@ -275,12 +275,17 @@ nav i.fa-circle-user {
     margin-top: 0px;
     font-size: 2em;
     font-weight: normal;
+    margin-bottom: calc(var(--pdd) * 3);
 }
 .object-actions h3 {
     margin-bottom: calc(var(--pdd) / 4);
 }
 .object-actions button {
     margin-top: calc(var(--pdd) / 2);
+    width: 100%;
+}
+.object-actions button.primary {
+    margin-top: calc(var(--pdd) * 2);
 }
 
 /* RADIO BUTTONS */
@@ -299,6 +304,8 @@ nav i.fa-circle-user {
     align-items: center;
     transition: .3s;
 }
+
+.radio-container.active,
 .radio-container:hover {
     cursor: pointer;
     transform: scale(1.1);
