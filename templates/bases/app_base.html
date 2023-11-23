@@ -32,19 +32,20 @@
             </div>
 
             <div class="right">
-                <div class="options-wrapper">
-                    <div class="options">
-                        {% if logged_in %}
+                {% if logged_in %}
+                    <div class="options-wrapper">
+                        <div class="options">
+                            
                             <i class="fa-solid fa-list" onclick="loadObjects('collection')"></i>
                             <i class="fa-solid fa-heart" onclick="loadObjects('wishlist')"></i>
-                            <i class="fa-solid fa-gear" onclick="loadSettings()"></i>
-                        {% else %}
-                            <a href="/login">Login</a>
-                        {% endif %}
-                    </div>
+                            <i class="fa-solid fa-gear" onclick="loadSettings()"></i>  
+                        </div>
 
-                    <i onclick="this.parentNode.querySelector('.options').classList.toggle('active')" class="fa-regular fa-circle-user"></i>
-                </div>
+                        <i onclick="this.parentNode.querySelector('.options').classList.toggle('active')" class="fa-regular fa-circle-user"></i>
+                    </div>
+                {% else %}
+                    <i onclick="window.location.href=`/login?next=/${new URLSearchParams(window.location.search).get('p')}`" class="fa-regular fa-circle-user"></i>
+                {% endif %}
 
                 <i class="fa-solid fa-cart-shopping"></i>
             </div>
