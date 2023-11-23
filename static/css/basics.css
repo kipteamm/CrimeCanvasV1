@@ -32,6 +32,10 @@ a {
     color: var(--primary-font-clr)
 }
 
+h3 {
+    margin: calc(var(--pdd) / 2) 0px;
+}
+
 p {
     margin-bottom: calc(var(--pdd) / 2);
 }

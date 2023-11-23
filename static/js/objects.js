@@ -67,12 +67,20 @@ function getObjects(objectPage) {
 const preview = document.querySelector('.object-preview');
 const overlay = document.querySelector('.dark-overlay');
 
+let currentObject = null;
+
 async function viewObject(objectID) {
     preview.style.bottom = '0';
 
     overlay.classList.add('active')
 
     document.body.style.overflowY = 'hidden';
+
+    if (currentObject === objectID) {
+        return   
+    }
+
+    currentObject = objectID
 
     const response = await fetch(`/api/object/${objectID}`)
 
@@ -89,8 +97,31 @@ async function viewObject(objectID) {
         <p>${object.description}</p>
     `
 
+    let players = '';
+    let languages = '';
+
+    object.player_amounts.forEach(player => {
+        players += generateOption(player)
+    });
+
+    object.languages.forEach(language => {
+        languages += generateOption(`<img src="/static/images/flags/${language}.svg">`)
+    });
+
     preview.querySelector('.object-actions').innerHTML = `
-        quick test
+        <h3>€<span id="price">10</span> EUR</h3> 
+
+        <h3>Players</h3>
+        <div class="radio-options">
+            ${players}
+        </div>
+
+        <h3>Languages</h3>
+        <div class="radio-options">
+            ${languages}
+        </div>
+        
+        <button class="primary">Add to cart</button>
     `
 }
 
@@ -98,4 +129,12 @@ function closePreview() {
     preview.style.bottom = '-100vh';
     overlay.classList.remove('active')
     document.body.style.overflowY = 'scroll'
+}
+
+function generateOption(option) {
+    return `
+    <div class="radio-container">
+        ${option}
+    </div>
+    `
 }

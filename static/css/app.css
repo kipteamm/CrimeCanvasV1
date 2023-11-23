@@ -262,8 +262,49 @@ nav i.fa-circle-user {
 .object-content {
     flex: 70%
 }
+
 .object-actions {
     flex: 30%;
     margin: calc(var(--pdd) * -5) calc(var(--pdd) * -2) 0px 0px;
     background-color: var(--primary-bg);
+    border-radius: var(--rad) var(--rad) 0px 0px;
+    padding: var(--pdd);
+}
+
+.object-actions h3:first-child {
+    margin-top: 0px;
+    font-size: 2em;
+    font-weight: normal;
+}
+.object-actions h3 {
+    margin-bottom: calc(var(--pdd) / 4);
+}
+.object-actions button {
+    margin-top: calc(var(--pdd) / 2);
+}
+
+/* RADIO BUTTONS */
+.radio-options {
+    display: flex;
+    gap: calc(var(--rad) / 2);
+}
+
+.radio-container {
+    border-radius: var(--rad);
+    background-color: var(--secondary-bg);
+    width: calc(var(--pdd) * 2);
+    height: calc(var(--pdd) * 2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+}
+.radio-container:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    background-color: var(--secondary-clr);
+}
+
+.radio-container img {
+    width: 75%;
 }
