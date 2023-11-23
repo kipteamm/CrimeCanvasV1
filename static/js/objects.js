@@ -34,7 +34,7 @@ function createObject(object) {
             <div class="image-overlay"></div>
 
             <div class="tags">
-                ${players}<span class="tag"><i class="fa-solid fa-clock"></i>${generateTime(object.time)}</span>
+                ${players}<span class="tag"><i class="fa-solid fa-clock"></i>${generateTime(object.time)}</span><span class="tag">${object.age}</span>
             </div>
         </div>
 
@@ -95,6 +95,21 @@ async function viewObject(objectID) {
     preview.querySelector('.object-content').innerHTML = `
         <h1>${object.title}</h1>
         <p>${object.description}</p>
+
+        <h3>Specifications</h3>
+        <ul>
+            <li>
+                Recommended age: ${object.age}
+                <span>The recommended age is based on story difficulty and story themes.</span>
+            </li>
+            <li>Average time playing: ${generateTime(object.time)}</li>
+            <li>Themes: ${object.themes.join(', ')}.</li>
+            <li>Includes a full setup guide.</li>
+            <li>Includes a set of rules.</li>
+            <li>Includes all files needed to set the game up.</li>
+        </ul>
+
+        <h3>Reviews</h3>
     `
 
     let players = '';

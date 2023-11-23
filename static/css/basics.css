@@ -1,10 +1,13 @@
 :root {
     --primary-bg: #f7f8f9;
     --secondary-bg: #dcdfe4;
-    --tertiary-bg: #172b4d;
+    --tertiary-bg: #023430;
 
-    --primary-clr: #e5dbff;
-    --secondary-clr: #fbf77a;
+    --primary-clr: #7cd4cd;
+    --secondary-clr: #023430;
+
+    --temp: #f99b01;
+    --temp: #58cc02;
 
     --primary-font: 'Comfortaa-Light';
     --primary-font-clr: #172b4d;
@@ -88,7 +91,7 @@ input:hover {
 
 button.primary {
     background-color: var(--secondary-clr);
-    color: var(--primary-font-clr);
+    color: var(--secondary-font-clr);
 }
 button.secondary {
     background-color: var(--secondary-bg);

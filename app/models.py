@@ -32,6 +32,8 @@ class Game(models.Model):
 
     languages = models.JSONField()
     player_amounts = models.JSONField()
+    age = models.IntegerField()
+    themes = models.JSONField()
 
     reviews = models.ManyToManyField(Review, related_name="user_reviews")
 
@@ -50,5 +52,7 @@ class Game(models.Model):
             'time' : self.time,
             'languages' : json.loads(self.languages),
             'player_amounts' : json.loads(self.player_amounts),
+            'age' : f'{self.age}+',
+            'themes' : self.themes,
             'reviews' : reviews,
         }
