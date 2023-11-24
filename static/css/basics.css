@@ -1,7 +1,8 @@
 :root {
     --primary-bg: #f7f8f9;
     --secondary-bg: #dcdfe4;
-    --tertiary-bg: #023430;
+    --tertiary-bg: #c2c6cc;
+    --quaternary-bg: #023430;
 
     --primary-clr: #98c6c3;
     --secondary-clr: #023430;
@@ -62,7 +63,7 @@ p {
 }
 
 footer {
-    background-color: var(--tertiary-bg);
+    background-color: var(--quaternary-bg);
     padding: calc(var(--pdd) * 3);
     color: var(--secondary-font-clr);
 }
@@ -75,6 +76,7 @@ input {
     border-radius: var(--rad);
     font-size: 16px;
     outline: none;
+    transition: .3s;
 }
 
 button {
@@ -93,8 +95,16 @@ button.primary {
     background-color: var(--secondary-clr);
     color: var(--secondary-font-clr);
 }
+button.primary:hover {
+    background-color: var(--primary-clr);
+    color: var(--primary-font-clr)
+}
+
 button.secondary {
     background-color: var(--secondary-bg);
+}
+button.secondary:hover {
+    background-color: var(--tertiary-bg);
 }
 
 input.primary {

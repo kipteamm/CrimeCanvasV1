@@ -13,7 +13,7 @@ def get_objects(request, page):
     user = request.user
 
     if page == "testing":
-        games = models.Game.objects.filter(tested=False)
+        games = models.Game.objects.filter(tested=False).prefetch_related('reviews')
     
     elif page == "wishlist":
         if not user:
@@ -28,26 +28,26 @@ def get_objects(request, page):
         games = user.collection.all()
 
     else:
-        games = models.Game.objects.filter(tested=True)
+        games = models.Game.objects.filter(tested=True).prefetch_related('reviews')
 
     objects = []
 
     for game in games:
-        objects.append(game.to_dict(user))
+        objects.append(game.to_dict(user, False))
 
     return JsonResponse({'objects' : objects})
 
 
 @decorators.authenticated(required=False)
 def get_object(request, id):
-    game = models.Game.objects.filter(id=id)
+    game = models.Game.objects.filter(id=id).prefetch_related('reviews')
 
     if not game.exists():
         return JsonResponse({'error' : 'No game with that id.'}, status=404)
     
     game = game.first()
 
-    response = game.to_dict(request.user) # type: ignore
+    response = game.to_dict(request.user, True) # type: ignore
 
     return JsonResponse(response)
 

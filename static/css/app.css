@@ -254,6 +254,7 @@ nav i.fa-circle-user {
     background-color: var(--primary-bg);
     z-index: 11;
     border-radius: var(--rad) var(--rad) 0px 0px;
+    overflow-y: scroll;
 }
 
 .object-preview h1 {
@@ -287,6 +288,22 @@ nav i.fa-circle-user {
     display: block;
     font-size: 12px;
     font-style: italic;
+}
+
+.object-content .rating {
+    display: flex;
+    margin-bottom: calc(var(--pdd) / 4);
+}
+
+.object-content .rating:first-child {
+    font-size: 2em;
+}
+
+.object-content .rating span:first-child {
+    flex: 30%;
+}
+.object-content .rating span:last-child {
+    flex: 70%;
 }
 
 .object-actions {

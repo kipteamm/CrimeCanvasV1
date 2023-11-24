@@ -70,7 +70,7 @@ function createObject(object) {
 
             <div class="actions">
                 <span><i class="fa-solid fa-star"></i>5.0</span>
-                <span><i class="fa-${isWishlisted} fa-heart" onclick="wishlist('${object.id}', false)"></i></span>
+                <span><i class="fa-${isWishlisted} fa-heart" onclick="wishlist('${object.id}')"></i></span>
         </div>
     `
 
@@ -123,11 +123,19 @@ async function viewObject(objectID) {
         return   
     }
 
+    preview.id = `${objectID}-preview`;
+
     currentObject = objectID
 
     const objectData = await getFromApi(`/api/object/${objectID}`)
 
     preview.querySelector('.object-banner').src = `/static/game/${objectData.id}/banner.jpg`
+
+    writeReview = ''
+
+    if (objectData.owned) {
+        writeReview = '<button class="primary" onclick="writeReview()">Write a review</button>'
+    }
 
     preview.querySelector('.object-content').innerHTML = `
         <h1>${objectData.title}</h1>
@@ -146,7 +154,25 @@ async function viewObject(objectID) {
             <li>Includes all files needed to set the game up.</li>
         </ul>
 
-        <h3>Reviews</h3>
+        <h3>Reviews (${objectData.reviews.length})</h3>
+        <div class="reviews">
+            <div class="rating">
+                ${generateRating(objectData.ratings.total, 'Total')}
+            </div>
+            <div class="rating">
+                ${generateRating(objectData.ratings.story, 'Story')}
+            </div>
+            <div class="rating">
+                ${generateRating(objectData.ratings.gameplay, 'Gameplay')}
+            </div>
+            <div class="rating">
+                ${generateRating(objectData.ratings.difficulty, 'Difficulty')}
+            </div>
+            <div class="rating">
+                ${generateRating(objectData.ratings.enjoyment, 'Enjoyment')}
+            </div>
+            ${writeReview}
+        </div>
     `
 
     let players = '';
@@ -159,6 +185,12 @@ async function viewObject(objectID) {
     objectData.languages.forEach(language => {
         languages += generateOption(`<img src="/static/images/flags/${language}.svg">`, languages === '')
     });
+
+    isWishlisted = 'Wishlist'
+
+    if (objectData.wishlisted) {
+        isWishlisted = 'Remove wishlist'
+    }
 
     preview.querySelector('.object-actions').innerHTML = `
         <h3>€<span id="price">10</span> EUR</h3> 
@@ -174,7 +206,7 @@ async function viewObject(objectID) {
         </div>
         
         <button class="primary">Add to cart</button>
-        <button class="secondary" onclick="wishlist('${objectData.id}', true)">Wishlist</button>
+        <button class="secondary" onclick="wishlist('${objectData.id}')">${isWishlisted}</button>
     `
 }
 
@@ -204,7 +236,7 @@ function selectOption(elm) {
     elm.classList.add('active')
 }
 
-async function wishlist(objectID, preview) {
+async function wishlist(objectID) {
     const url = `api/object/toggle-wishlist/`;
 
     const data = {
@@ -221,9 +253,7 @@ async function wishlist(objectID, preview) {
         },
     });
 
-    if (!response.ok) {
-        console.log(response)
-        
+    if (!response.ok) { 
         return
     }
 
@@ -238,4 +268,31 @@ async function wishlist(objectID, preview) {
         wishlistIndicator.classList.remove('fa-solid')
         wishlistIndicator.classList.add('fa-regular')
     }
+
+    const previewWishlistIndicator = preview.querySelector('button.secondary')
+
+    console.log(previewWishlistIndicator.innerText)
+
+    if (previewWishlistIndicator.innerText === 'Wishlist') {
+        previewWishlistIndicator.innerText = 'Remove wishlist'
+    } else {
+        previewWishlistIndicator.innerText = 'Wishlist'
+    }
+}
+
+function generateRating(rating, type) {
+    stars = ''
+
+    for (var i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars += '<i class="fa fa-solid fa-star"></i>'
+        } else {
+            stars += '<i class="fa fa-regular fa-star"></i>'
+        }
+    }
+
+    return `
+        <span>${type}</span>
+        <span>${stars}</span>
+    `
 }
