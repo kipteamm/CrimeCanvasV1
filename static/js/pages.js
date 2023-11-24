@@ -29,6 +29,8 @@ async function loadAbout() {
 }
 
 async function loadObjects(objectPage) {
+    closePreview()
+
     if (page === objectPage) {
         return
     }

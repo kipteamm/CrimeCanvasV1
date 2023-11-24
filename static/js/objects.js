@@ -127,7 +127,7 @@ async function viewObject(objectID) {
 
     currentObject = objectID
 
-    const objectData = await getFromApi(`/api/object/${objectID}`)
+    const objectData = await getFromApi(`/api/object/${objectID}/`)
 
     preview.querySelector('.object-banner').src = `/static/game/${objectData.id}/banner.jpg`
 
@@ -192,6 +192,14 @@ async function viewObject(objectID) {
         isWishlisted = 'Remove wishlist'
     }
 
+    buyButton = `<button class="primary buy-button" onclick="addToCart('${objectData.id}')">Add to cart</button>`
+
+    if (objectData.owned) {
+        buyButton = `<button class="primary buy-button" onclick="loadObjects('collection')">Owned (see collection)</button>`
+    } else if (page === 'testing') {
+        buyButton = `<button class="primary buy-button" onclick="test('${objectData.id}')">Test</button>`
+    }
+
     preview.querySelector('.object-actions').innerHTML = `
         <h3>€<span id="price">10</span> EUR</h3> 
 
@@ -205,7 +213,7 @@ async function viewObject(objectID) {
             ${languages}
         </div>
         
-        <button class="primary">Add to cart</button>
+        ${buyButton}
         <button class="secondary" onclick="wishlist('${objectData.id}')">${isWishlisted}</button>
     `
 }
@@ -237,7 +245,7 @@ function selectOption(elm) {
 }
 
 async function wishlist(objectID) {
-    const url = `api/object/toggle-wishlist/`;
+    const url = `api/object/toggle-wishlist`;
 
     const data = {
         id : objectID
@@ -295,4 +303,31 @@ function generateRating(rating, type) {
         <span>${type}</span>
         <span>${stars}</span>
     `
+}
+
+async function test(objectID) {
+    const url = `api/object/test`;
+
+    const data = {
+        id : objectID
+    }
+
+    const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": getCookie("au_id"),
+            'X-CSRFToken': document.cookie.match(/csrftoken=([^ ;]+)/)[1],
+        },
+    });
+
+    if (!response.ok) { 
+        return
+    }
+
+    const buyButton = document.getElementById(objectID).querySelector('.buy-button')
+
+    buyButton.innerText = 'Owned (see collection)'
+    buyButton.setAttribute('onclick', 'loadObjects("collection")')
 }

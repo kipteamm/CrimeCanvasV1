@@ -6,6 +6,7 @@ from utils import decorators
 from app import models
 
 import json
+import time
 
 
 @decorators.authenticated(required=False)
@@ -67,5 +68,28 @@ def toggle_wishlist(request):
     
     else:
         user.wishlist.add(game)
+
+    return JsonResponse({'success' : True})
+
+
+@decorators.authenticated()
+def test_game(request):
+    game_id = json.loads(request.body.decode('utf-8')).get('id')
+
+    if not game_id:
+        return JsonResponse({'error' : 'No game id provided.'}, status=400)
+    
+    game = models.Game.objects.get(id=game_id)
+    user = request.user
+
+    if user.collection.filter(id=game.id).exists():
+        return JsonResponse({'error' : 'You are already testing this game.'}, status=403)
+
+    if time.time() - user.last_test_timestamp < 2628000:
+        return JsonResponse({'error' : 'You have to wait 30 days before you can test again.'}, status=403)
+    
+    user.last_test_timestamp = time.time()
+    user.collection.add(game)
+    user.save()
 
     return JsonResponse({'success' : True})

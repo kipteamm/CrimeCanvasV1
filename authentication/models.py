@@ -23,6 +23,7 @@ class User(models.Model):
 
     # Time records
     creation_timestamp = models.FloatField()
+    last_test_timestamp = models.FloatField(default=0)
 
     def to_dict(self) -> dict:
         return {
