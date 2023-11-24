@@ -24,6 +24,7 @@
     <script src="https://kit.fontawesome.com/697d2afc76.js" crossorigin="anonymous"></script>
 </head>
 <body> 
+    {% csrf_token %}
     {% block content %}{% endblock %}
 </body>
 </html>

@@ -56,7 +56,7 @@ class Game(models.Model):
             'languages' : json.loads(self.languages),
             'player_amounts' : json.loads(self.player_amounts),
             'age' : f'{self.age}+',
-            'themes' : self.themes,
+            'themes' : json.loads(self.themes),
             'reviews' : reviews,
             'wishlisted' : wishlisted
         }

@@ -222,6 +222,8 @@ async function wishlist(objectID, preview) {
     });
 
     if (!response.ok) {
+        console.log(response)
+        
         return
     }
 

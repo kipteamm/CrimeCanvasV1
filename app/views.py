@@ -21,6 +21,8 @@ def create_object(request):
         time=160,
         languages=json.dumps(['english', 'dutch']),
         player_amounts=json.dumps([9, 11, 13]),
+        age=18,
+        themes=json.dumps(['Violence', 'Drugs', 'Alcohol', 'War', 'Relationships'])
     )
 
     return render(request, 'app/create_object.html')

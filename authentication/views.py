@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 
-from authentication import models
+from authentication.models import User
 
-from app import models
+from app.models import Game
 
 from utils import functions 
 
@@ -14,7 +14,7 @@ def register(request):
     if request.method == "POST":
         email_address = request.POST.get('email_address')
 
-        if models.User.objects.filter(email_address__iexact=email_address).exists():
+        if User.objects.filter(email_address__iexact=email_address).exists():
             messages.error(request, "This email address is already in use.")
 
             return redirect('register')
@@ -28,7 +28,7 @@ def register(request):
 
         salt = functions.random_string(64)
 
-        models.User.objects.create(
+        User.objects.create(
             email_address=email_address,
             password=functions.sha256(f"{salt}${password}"),
             salt=salt,
@@ -47,7 +47,7 @@ def login(request):
         email_address = request.POST.get('email_address')
         password = request.POST.get('password')
 
-        user = models.User.objects.filter(email_address__iexact=email_address)
+        user = User.objects.filter(email_address__iexact=email_address)
 
         if not user.exists():
             messages.error(request, "There is no account with this email registered.")
@@ -83,8 +83,18 @@ def login(request):
 
 
 def test(request):
-    for user in models.User.objects.all():
-        user.permissions = 2
-        user.save()
+    ids = ['7133166578358554624', '7133166584499015680', '7133166594351435776']
+
+    cnt = 0
+
+    for game in Game.objects.all():
+        if cnt > 2:
+            game.delete()
+        
+        game.id = ids[cnt]
+        
+        game.save()
+
+        cnt += 1
 
     return HttpResponse('success')
