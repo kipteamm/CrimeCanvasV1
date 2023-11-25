@@ -93,3 +93,12 @@ def test_game(request):
     user.save()
 
     return JsonResponse({'success' : True})
+
+
+@decorators.authenticated()
+def add_review(request):
+    body = json.loads(request.body.decode('utf-8'))
+
+    game_id = body.get('id')
+    ratings = body.get('ratings')
+    review = body.get('review')

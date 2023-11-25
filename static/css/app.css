@@ -228,20 +228,29 @@ nav i.fa-circle-user {
 }
 
 /* OBJECT PREVIEW */
+.review-overlay,
 .dark-overlay {
     width: 100vw;
     height: 100vh;
     position: fixed;
     top: 0;
-    z-index: 10;
     opacity: 0;
     pointer-events: none;
     background-color: black;
     transition: .3s;
 }
+.review-overlay.active,
 .dark-overlay.active {
     opacity: .5;
     pointer-events: all;
+}
+
+.review-overlay {
+    z-index: 12;
+}
+
+.dark-overlay {
+    z-index: 10;
 }
 
 .object-preview {
@@ -359,4 +368,45 @@ nav i.fa-circle-user {
 
 .radio-container img {
     width: 75%;
+}
+
+/* REVIEWS */
+.review-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 13;
+    background-color: var(--primary-bg);
+    padding: var(--pdd);
+    border-radius: var(--rad);
+    width: calc(var(--pdd) * 20);
+    overflow: hidden;
+    display: none;
+}
+
+.review-modal h1 {
+    margin-top: 0px;
+}
+
+.review-modal i {
+    font-size: 5em;
+}
+.review-modal i:hover {
+    cursor: pointer;
+}
+
+.review-modal .section {
+    margin-left: calc(var(--pdd) * -20);
+    transition: all .1s ease;
+    display: none;
+}
+.review-modal .section.active {
+    margin-left: 0px;
+    display: block;
+}
+
+.review-modal textarea {
+    height: calc(var(--pdd) * 5);
+    margin-bottom: calc(var(--pdd) / 2);
 }

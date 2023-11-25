@@ -16,14 +16,77 @@
     <link rel="stylesheet" type="text/css" href="/static/css/basics.css">
 
     <!-- Custom JS -->
-    <script src="/static/js/objects.js" defer></script>
     <script src="/static/js/pages.js" defer></script>
+    <script src="/static/js/objects.js" defer></script>
+    <script src="/static/js/reviews.js" defer></script>
 
     <!-- None custom Scripts -->
     <script src="https://kit.fontawesome.com/6996113341.js" crossorigin="anonymous"></script>
 </head>
 <body> 
     {% csrf_token %}
+
+    <div class="review-overlay" onclick="closeReviewSection()"></div>
+    <div class="review-modal">
+        <div class="rating section active" id="review-section-1">
+            <h1>Story</h1>
+
+            <i class="fa fa-regular fa-star" onclick="setRating(1, this.parentNode.id)" onmouseover="showRating(1, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(2, this.parentNode.id)" onmouseover="showRating(2, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(3, this.parentNode.id)" onmouseover="showRating(3, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(4, this.parentNode.id)" onmouseover="showRating(4, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(5, this.parentNode.id)" onmouseover="showRating(5, this.parentNode.id)"></i>
+        </div>
+        <div class="rating section" id="review-section-2">
+            <h1>Gameplay</h1>
+
+            <i class="fa fa-regular fa-star" onclick="setRating(1, this.parentNode.id)" onmouseover="showRating(1, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(2, this.parentNode.id)" onmouseover="showRating(2, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(3, this.parentNode.id)" onmouseover="showRating(3, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(4, this.parentNode.id)" onmouseover="showRating(4, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(5, this.parentNode.id)" onmouseover="showRating(5, this.parentNode.id)"></i>
+        </div>
+        <div class="rating section" id="review-section-3">
+            <h1>Diffifculty</h1>
+
+            <i class="fa fa-regular fa-star" onclick="setRating(1, this.parentNode.id)" onmouseover="showRating(1, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(2, this.parentNode.id)" onmouseover="showRating(2, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(3, this.parentNode.id)" onmouseover="showRating(3, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(4, this.parentNode.id)" onmouseover="showRating(4, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(5, this.parentNode.id)" onmouseover="showRating(5, this.parentNode.id)"></i>
+        </div>
+        <div class="rating section" id="review-section-4">
+            <h1>Enjoyment</h1>
+
+            <i class="fa fa-regular fa-star" onclick="setRating(1, this.parentNode.id)" onmouseover="showRating(1, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(2, this.parentNode.id)" onmouseover="showRating(2, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(3, this.parentNode.id)" onmouseover="showRating(3, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(4, this.parentNode.id)" onmouseover="showRating(4, this.parentNode.id)"></i>
+            <i class="fa fa-regular fa-star" onclick="setRating(5, this.parentNode.id)" onmouseover="showRating(5, this.parentNode.id)"></i>
+        </div>
+        <div class="section" id="review-section-5">
+            <h1>Extra information</h1>
+
+            <textarea maxlength="1000" placeholder="My review..."></textarea>
+
+            <button class="primary" onclick="submitReview(this)">Submit</button>
+        </div>
+        <div class="section" id="review-section-6">
+            <h1>Submitting review...</h1>
+
+            <p>
+                Thanks for your review!
+            </p>
+        </div>
+        <div class="section" id="review-section-7">
+            <h1>An error occured.</h1>
+
+            <p>
+                We are sorry for the inconvenience. Please try again later.
+            </p>
+        </div>
+    </div>
+
     <div class="wrapper">
         <nav>
             <div class="left">

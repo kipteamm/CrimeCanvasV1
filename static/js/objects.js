@@ -134,7 +134,7 @@ async function viewObject(objectID) {
     writeReview = ''
 
     if (objectData.owned) {
-        writeReview = '<button class="primary" onclick="writeReview()">Write a review</button>'
+        writeReview = '<button class="primary" onclick="openReviewSection()">Write a review</button>'
     }
 
     preview.querySelector('.object-content').innerHTML = `
