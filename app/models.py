@@ -75,6 +75,7 @@ class Game(models.Model):
             'player_amounts': json.loads(self.player_amounts),
             'age': f'{self.age}+',
             'themes': self.themes,
+            'tested': self.tested,
         }
 
         if user:

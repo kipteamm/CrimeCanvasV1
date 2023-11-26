@@ -151,30 +151,47 @@ async function viewObject(objectID) {
         isWishlisted = 'Remove wishlist'
     }
 
-    buyButton = `<button class="primary buy-button" onclick="addToCart('${objectData.id}')">Add to cart</button>`
+    buyButton = ''    
 
     if (objectData.owned) {
-        buyButton = `<button class="primary buy-button" onclick="loadObjects('collection')">Owned${page === 'collection' ? '' : ' (see collection)'}</button>`
-    } else if (page === 'testing') {
-        buyButton = `<button class="primary buy-button" onclick="test('${objectData.id}')">Test</button>`
+        buyButton = `<button class="primary buy-button" onclick="${page === 'collection' ? '' : "loadObjects('collection')"}">Owned${page === 'collection' ? '' : ' (see collection)'}</button>`
     }
 
-    preview.querySelector('.object-actions').innerHTML = `
-        <h3>€<span id="price">${objectData.player_amounts[0]}</span> EUR</h3> 
+    if (!objectData.tested) {
+        if (buyButton === '') {
+            buyButton = `<button class="primary buy-button" onclick="test('${objectData.id}')">Test</button>`
+        }
 
-        <h3>Players</h3>
-        <div class="radio-options">
-            ${players}
-        </div>
+        preview.querySelector('.object-actions').innerHTML = `
+            ${buyButton}
+           <button class="secondary" onclick="wishlist('${objectData.id}')">${isWishlisted}</button>
+        `
+    } else if (page === 'collection') {
+        preview.querySelector('.object-actions').innerHTML = `
+           <button class="primary" onclick="setup('${objectData.id}')">Setup</button>
+        `
+    } else {
+        if (buyButton === '') {
+            buyButton = `<button class="primary buy-button" onclick="addToCart('${objectData.id}')">Add to cart</button>`
+        }
 
-        <h3>Languages</h3>
-        <div class="radio-options">
-            ${languages}
-        </div>
-        
-        ${buyButton}
-        <button class="secondary" onclick="wishlist('${objectData.id}')">${isWishlisted}</button>
-    `
+        preview.querySelector('.object-actions').innerHTML = `
+            <h3>€<span id="price">${objectData.player_amounts[0]}</span> EUR</h3> 
+
+            <h3>Players</h3>
+            <div class="radio-options">
+                ${players}
+            </div>
+
+            <h3>Languages</h3>
+            <div class="radio-options languages">
+                ${languages}
+            </div>
+            
+            ${buyButton}
+            <button class="secondary" onclick="wishlist('${objectData.id}')">${isWishlisted}</button>
+        `
+    }
 
     const reviewSection = preview.querySelector('.review-section');
     const reviewsData = await getFromApi(`/api/object/${objectID}/reviews`)
@@ -213,7 +230,7 @@ function selectOption(elm) {
     elm.classList.add('active')
 
     if (elm.classList.contains('player')) {
-        updatePrice(elm.innerText)
+        document.getElementById('price').innerText = elm.innerText;
     }
 }
 
@@ -324,8 +341,4 @@ function generateScore(total) {
             return range.adjective;
         }
     }
-}
-
-function updatePrice(price) {
-    document.getElementById('price').innerText = price;
 }

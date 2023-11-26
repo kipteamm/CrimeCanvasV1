@@ -337,17 +337,17 @@ nav i.fa-circle-user {
 }
 
 .object-actions button {
-    margin-top: calc(var(--pdd) / 2);
+    margin-bottom: calc(var(--pdd) / 2);
     width: 100%;
-}
-.object-actions button.primary {
-    margin-top: calc(var(--pdd) * 2);
 }
 
 /* RADIO BUTTONS */
 .radio-options {
     display: flex;
     gap: calc(var(--rad) / 2);
+}
+.radio-options.languages {
+    margin-bottom: calc(var(--pdd) * 3);
 }
 
 .radio-container {
