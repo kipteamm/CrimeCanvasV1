@@ -5,10 +5,12 @@ let reviewedObject = null;
 let reviewSection = 1;
 let ratings = [];
 
-function openReviewSection() {
+function openReviewSection(objectID) {
     reviewModal.style.display = 'block';
 
-    reviewOverlay.classList.add('active')
+    reviewOverlay.classList.add('active');
+
+    reviewedObject = objectID
 }
 
 function closeReviewSection() {
@@ -19,9 +21,12 @@ function closeReviewSection() {
     reviewModal.querySelector('textarea').value = '';
     ratings = [];
     reviewSection = 1;
+    reviewedObject = null;
 }
 
 function nextSection() {
+    console.log(reviewSection)
+
     const visibleSection = document.getElementById(`review-section-${reviewSection}`)
     const nextSection = document.getElementById(`review-section-${reviewSection + 1}`)
 
@@ -52,13 +57,19 @@ function showRating(rating, id) {
     }
 }
 
-async function submitReview(textarea) {
+async function submitReview(button) {
     const url = `api/object/review`;
+
+    review = button.parentNode.querySelector('textarea').value
+
+    if (review === '') {
+        review = null
+    }
 
     const data = {
         id : reviewedObject,
         ratings : ratings,
-        review : textarea.value
+        review : review
     }
 
     nextSection()
@@ -76,12 +87,16 @@ async function submitReview(textarea) {
     if (!response.ok) { 
         nextSection()
 
+        console.log(await response.json())
+
+        /*
         setTimeout(() => {
             closeReviewSection()
             openReviewSection()
 
             return
         }, 3000);
+        */
     }
 
     closeReviewSection()

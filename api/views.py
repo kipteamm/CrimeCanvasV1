@@ -100,5 +100,36 @@ def add_review(request):
     body = json.loads(request.body.decode('utf-8'))
 
     game_id = body.get('id')
+
+    if not game_id:
+        return JsonResponse({'error' : 'No game id provided.'}, status=400)
+
+    game = models.Game.objects.get(id=game_id)
+    user = request.user
+
+    if not user.collection.filter(id=game.id).exists():
+        return JsonResponse({'error' : 'You have to test the game before you can review it.'}, status=403)
+    
+    if game.reviews.filter(user=user).exists():
+        return JsonResponse({'error' : 'You have already reviewed this game.'}, status=403)
+
     ratings = body.get('ratings')
+
+    if not ratings:
+        return JsonResponse({'error' : 'No ratings provided.'}, status=400)
+
     review = body.get('review')
+
+    review = models.Review.objects.create(
+        user=user,  
+        story=ratings[0],
+        gameplay=ratings[1],
+        difficulty=ratings[2],
+        enjoyment=ratings[3],
+        review=review,
+        creation_timestamp=time.time(),
+    )
+
+    game.reviews.add(review)
+
+    return JsonResponse(review.to_dict())

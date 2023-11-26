@@ -69,8 +69,9 @@ function createObject(object) {
             ${languages}
 
             <div class="actions">
-                <span><i class="fa-solid fa-star"></i>5.0</span>
+                <span><i class="fa-solid fa-star"></i>${object.rating}</span>
                 <span><i class="fa-${isWishlisted} fa-heart" onclick="wishlist('${object.id}')"></i></span>
+            </div>
         </div>
     `
 
@@ -133,8 +134,8 @@ async function viewObject(objectID) {
 
     writeReview = ''
 
-    if (objectData.owned) {
-        writeReview = '<button class="primary" onclick="openReviewSection()">Write a review</button>'
+    if (objectData.owned && !objectData.reviewed) {
+        writeReview = `<button class="primary" onclick="openReviewSection('${objectData.id}')">Write a review</button>`
     }
 
     preview.querySelector('.object-content').innerHTML = `
@@ -157,19 +158,19 @@ async function viewObject(objectID) {
         <h3>Reviews (${objectData.reviews.length})</h3>
         <div class="reviews">
             <div class="rating">
-                ${generateRating(objectData.ratings.total, 'Total')}
+                ${generateRating(objectData.reviews.total, 'Total')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.ratings.story, 'Story')}
+                ${generateRating(objectData.reviews.story, 'Story')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.ratings.gameplay, 'Gameplay')}
+                ${generateRating(objectData.reviews.gameplay, 'Gameplay')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.ratings.difficulty, 'Difficulty')}
+                ${generateRating(objectData.reviews.difficulty, 'Difficulty')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.ratings.enjoyment, 'Enjoyment')}
+                ${generateRating(objectData.reviews.enjoyment, 'Enjoyment')}
             </div>
             ${writeReview}
         </div>
