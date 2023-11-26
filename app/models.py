@@ -27,7 +27,7 @@ class Review(models.Model):
 
         return round(overall_rating, 2)
 
-    def to_dict(self) -> dict:
+    def to_dict(self, user=None) -> dict:
         """
             'story' : self.story,
             'fun' : self.gameplay,
@@ -35,10 +35,16 @@ class Review(models.Model):
             'enjoyment' : self.enjoyment,
         """
 
+        writer = False
+
+        if user:
+            writer = self.user == user
+
         return {
             'review' : self.review,
             'total' : self._overall_rating(),
-            'creation_timestamp' : self.creation_timestamp
+            'creation_timestamp' : self.creation_timestamp,
+            'writer' : writer
         }
 
 

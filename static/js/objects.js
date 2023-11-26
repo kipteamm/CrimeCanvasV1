@@ -1,29 +1,3 @@
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-
-    return null;
-}
-
-function generateTime(minutes) {
-    const hours = `${Math.floor(minutes / 60)}h`;
-    const remainingMinutes = ` ${minutes % 60}m`;
-
-    if (remainingMinutes === " 0m") {
-        return hours
-    } else {
-        return hours + remainingMinutes
-    }
-}
-
 function createObject(object) {
     const wrapper = document.createElement('div');
 
@@ -76,28 +50,6 @@ function createObject(object) {
     `
 
     return wrapper
-}
-
-async function getFromApi(url) {
-    let response;
-
-    if (getCookie("au_id") !== null) {
-        response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: getCookie("au_id"),
-            },
-        });
-    } else {
-        response = await fetch(url)
-    }
-
-    if (!response.ok) {
-        return
-    }
-
-    return await response.json()
 }
 
 async function getObjects(objectPage) {
@@ -186,11 +138,11 @@ async function viewObject(objectID) {
     let languages = '';
 
     objectData.player_amounts.forEach(player => {
-        players += generateOption(player, players === '')
+        players += generateOption(player, players === '', true)
     });
 
     objectData.languages.forEach(language => {
-        languages += generateOption(`<img src="/static/images/flags/${language}.svg">`, languages === '')
+        languages += generateOption(`<img src="/static/images/flags/${language}.svg">`, languages === '', false)
     });
 
     isWishlisted = 'Wishlist'
@@ -208,7 +160,7 @@ async function viewObject(objectID) {
     }
 
     preview.querySelector('.object-actions').innerHTML = `
-        <h3>€<span id="price">10</span> EUR</h3> 
+        <h3>€<span id="price">${objectData.player_amounts[0]}</span> EUR</h3> 
 
         <h3>Players</h3>
         <div class="radio-options">
@@ -231,7 +183,7 @@ async function viewObject(objectID) {
         reviewSection.innerHTML += `
             <div class="review">
                 <p>
-                    ${generateScore(review.total)}・${generateRelativeTimestamp(review.creation_timestamp)}
+                    Their experience: ${generateScore(review.total)}・${generateRelativeTimestamp(review.creation_timestamp)}
                 </p>
                 <p>
                     ${review.review}
@@ -247,15 +199,9 @@ function closePreview() {
     document.body.style.overflowY = 'scroll'
 }
 
-function generateOption(option, active) {
-    let isActive = ''
-
-    if (active) {
-        isActive = ' active'
-    }
-
+function generateOption(option, active, isPlayerAmount) {
     return `
-    <div class="radio-container${isActive}" onclick="selectOption(this)">
+    <div class="radio-container${isPlayerAmount ? ' player' : ''}${active ? ' active': ''}" onclick="selectOption(this)">
         ${option}
     </div>
     `
@@ -265,6 +211,10 @@ function selectOption(elm) {
     elm.parentNode.querySelector('.active').classList.remove('active')
 
     elm.classList.add('active')
+
+    if (elm.classList.contains('player')) {
+        updatePrice(elm.innerText)
+    }
 }
 
 async function wishlist(objectID) {
@@ -364,9 +314,9 @@ function generateScore(total) {
         { min: 2.5, max: 3, adjective: "Above Average" },
         { min: 3, max: 3.5, adjective: "Good" },
         { min: 3.5, max: 4, adjective: "Very Good" },
-        { min: 4, max: 4.25, adjective: "Excellent" },
-        { min: 4.25, max: 4.5, adjective: "Outstanding" },
-        { min: 4.5, max: 5, adjective: "Exceptional" }
+        { min: 4, max: 4.5, adjective: "Excellent" },
+        { min: 4.5, max: 4.75, adjective: "Outstanding" },
+        { min: 4.75, max: 5, adjective: "Exceptional" }
     ];
 
     for (const range of adjectiveRanges) {
@@ -376,36 +326,6 @@ function generateScore(total) {
     }
 }
 
-function generateRelativeTimestamp(timestamp) {
-    const secondsInMinute = 60;
-    const secondsInHour = secondsInMinute * 60;
-    const secondsInDay = secondsInHour * 24;
-    const secondsInMonth = secondsInDay * 30;
-    const secondsInYear = secondsInDay * 365;
-
-    const now = Math.floor(Date.now() / 1000);
-    const difference = now - timestamp;
-
-    if (difference < 1) {
-        return "Just now";
-    }
-
-    const timeUnits = [
-        { value: secondsInYear, unit: "year" },
-        { value: secondsInMonth, unit: "month" },
-        { value: secondsInDay, unit: "day" },
-        { value: secondsInHour, unit: "hour" },
-        { value: secondsInMinute, unit: "minute" },
-        { value: 1, unit: "second" },
-    ];
-
-    for (const { value, unit } of timeUnits) {
-        const count = Math.floor(difference / value);
-
-        if (count >= 1) {
-            return count > 1 ? `${count} ${unit}s ago` : `${count} ${unit} ago`;
-        }
-    }
-
-    return "Just now";
+function updatePrice(price) {
+    document.getElementById('price').innerText = price;
 }

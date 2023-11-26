@@ -153,7 +153,7 @@ def get_reviews(request, id):
     response = []
 
     for review in game.reviews.all(): # type: ignore
-        response.append(review.to_dict())
+        response.append(review.to_dict(request.user))
 
     data = {'reviews' : response}
 
