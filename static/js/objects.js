@@ -140,7 +140,7 @@ async function viewObject(objectID) {
 
     preview.querySelector('.object-content').innerHTML = `
         <h1>${objectData.title}</h1>
-        <p>${objectData.description}</p>
+        <p>${objectData.description}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
 
         <h3>Specifications</h3>
         <ul>
@@ -150,29 +150,35 @@ async function viewObject(objectID) {
             </li>
             <li>Average time playing: ${generateTime(objectData.time)}</li>
             <li>Themes: ${objectData.themes.join(', ')}.</li>
+        </ul>
+
+        <h3>Includes</h3>
+        <ul>
             <li>Includes a full setup guide.</li>
             <li>Includes a set of rules.</li>
             <li>Includes all files needed to set the game up.</li>
         </ul>
 
-        <h3>Reviews (${objectData.reviews.length})</h3>
+        <h3>Reviews (${objectData.rating.reviews})</h3>
         <div class="reviews">
             <div class="rating">
-                ${generateRating(objectData.reviews.total, 'Total')}
+                ${generateRating(objectData.rating.total, 'Total')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.reviews.story, 'Story')}
+                ${generateRating(objectData.rating.story, 'Story')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.reviews.gameplay, 'Gameplay')}
+                ${generateRating(objectData.rating.gameplay, 'Gameplay')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.reviews.difficulty, 'Difficulty')}
+                ${generateRating(objectData.rating.difficulty, 'Difficulty')}
             </div>
             <div class="rating">
-                ${generateRating(objectData.reviews.enjoyment, 'Enjoyment')}
+                ${generateRating(objectData.rating.enjoyment, 'Enjoyment')}
             </div>
             ${writeReview}
+
+            <div class="review-section"></div>
         </div>
     `
 
@@ -196,7 +202,7 @@ async function viewObject(objectID) {
     buyButton = `<button class="primary buy-button" onclick="addToCart('${objectData.id}')">Add to cart</button>`
 
     if (objectData.owned) {
-        buyButton = `<button class="primary buy-button" onclick="loadObjects('collection')">Owned (see collection)</button>`
+        buyButton = `<button class="primary buy-button" onclick="loadObjects('collection')">Owned${page === 'collection' ? '' : ' (see collection)'}</button>`
     } else if (page === 'testing') {
         buyButton = `<button class="primary buy-button" onclick="test('${objectData.id}')">Test</button>`
     }
@@ -217,6 +223,22 @@ async function viewObject(objectID) {
         ${buyButton}
         <button class="secondary" onclick="wishlist('${objectData.id}')">${isWishlisted}</button>
     `
+
+    const reviewSection = preview.querySelector('.review-section');
+    const reviewsData = await getFromApi(`/api/object/${objectID}/reviews`)
+
+    reviewsData.reviews.forEach((review) => {
+        reviewSection.innerHTML += `
+            <div class="review">
+                <p>
+                    ${generateScore(review.total)}・${generateRelativeTimestamp(review.creation_timestamp)}
+                </p>
+                <p>
+                    ${review.review}
+                </p>
+            </div>
+        `
+    });
 }
 
 function closePreview() {
@@ -331,4 +353,59 @@ async function test(objectID) {
 
     buyButton.innerText = 'Owned (see collection)'
     buyButton.setAttribute('onclick', 'loadObjects("collection")')
+}
+
+function generateScore(total) {
+    const adjectiveRanges = [
+        { min: 0, max: 1, adjective: "Really Bad" },
+        { min: 1, max: 1.5, adjective: "Bad" },
+        { min: 1.5, max: 2, adjective: "Below Average" },
+        { min: 2, max: 2.5, adjective: "Average" },
+        { min: 2.5, max: 3, adjective: "Above Average" },
+        { min: 3, max: 3.5, adjective: "Good" },
+        { min: 3.5, max: 4, adjective: "Very Good" },
+        { min: 4, max: 4.25, adjective: "Excellent" },
+        { min: 4.25, max: 4.5, adjective: "Outstanding" },
+        { min: 4.5, max: 5, adjective: "Exceptional" }
+    ];
+
+    for (const range of adjectiveRanges) {
+        if (total >= range.min && total < range.max) {
+            return range.adjective;
+        }
+    }
+}
+
+function generateRelativeTimestamp(timestamp) {
+    const secondsInMinute = 60;
+    const secondsInHour = secondsInMinute * 60;
+    const secondsInDay = secondsInHour * 24;
+    const secondsInMonth = secondsInDay * 30;
+    const secondsInYear = secondsInDay * 365;
+
+    const now = Math.floor(Date.now() / 1000);
+    const difference = now - timestamp;
+
+    if (difference < 1) {
+        return "Just now";
+    }
+
+    const timeUnits = [
+        { value: secondsInYear, unit: "year" },
+        { value: secondsInMonth, unit: "month" },
+        { value: secondsInDay, unit: "day" },
+        { value: secondsInHour, unit: "hour" },
+        { value: secondsInMinute, unit: "minute" },
+        { value: 1, unit: "second" },
+    ];
+
+    for (const { value, unit } of timeUnits) {
+        const count = Math.floor(difference / value);
+
+        if (count >= 1) {
+            return count > 1 ? `${count} ${unit}s ago` : `${count} ${unit} ago`;
+        }
+    }
+
+    return "Just now";
 }

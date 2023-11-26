@@ -28,12 +28,17 @@ class Review(models.Model):
         return round(overall_rating, 2)
 
     def to_dict(self) -> dict:
-        return {
+        """
             'story' : self.story,
             'fun' : self.gameplay,
             'difficulty' : self.difficulty,
             'enjoyment' : self.enjoyment,
-            'review' : self.review
+        """
+
+        return {
+            'review' : self.review,
+            'total' : self._overall_rating(),
+            'creation_timestamp' : self.creation_timestamp
         }
 
 
@@ -74,7 +79,7 @@ class Game(models.Model):
             })
 
         if attach_reviews:
-            data['reviews'] = self._get_reviews_data()
+            data['rating'] = self._get_reviews_data()
 
         else:
             data['rating'] = _overall_ratings(self.reviews.all(), 'total')
@@ -83,46 +88,39 @@ class Game(models.Model):
 
 
     def _get_reviews_data(self) -> dict:
-        reviews_data = {
-            'reviews': [],
-            'total': 0,
-            'story': 0,
-            'gameplay': 0,
-            'difficulty': 0,
-            'enjoyment': 0,
+        ratings = {
+            'reviews': 0,
+            'total': 0.0,
+            'story': 0.0,
+            'gameplay': 0.0,
+            'difficulty': 0.0,
+            'enjoyment': 0.0,
         }
 
         reviews = self.reviews.all()
 
         if not reviews:
-            return reviews_data
+            return ratings
 
         for review in reviews:
-            review_data = {
-                'id': review.id,
-                'review': review.review,
-                'creation_timestamp': review.creation_timestamp,
-            }
-
-            reviews_data['reviews'].append(review_data)
+            ratings['reviews'] += 1
+            
             total = 0
 
             for field in ['story', 'gameplay', 'difficulty', 'enjoyment']:
                 rating = getattr(review, field)
 
-                reviews_data[field] += rating
+                ratings[field] += rating
 
                 total += rating
 
-            reviews_data['total'] += round(total / 4, 2)
-
-        total_reviews = len(reviews_data['reviews'])
+            ratings['total'] += round(total / 4, 2)
         
-        for field in reviews_data:
+        for field in ratings:
             if field != 'reviews':
-                reviews_data[field] = round(reviews_data[field] / total_reviews, 2)
+                ratings[field] = round(ratings[field] / ratings['reviews'], 2)
 
-        return reviews_data
+        return ratings
     
 
 def _overall_ratings(reviews: QuerySet, rating_type: str) -> float:

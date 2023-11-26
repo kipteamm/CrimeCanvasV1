@@ -10,6 +10,7 @@ nav {
     font-size: 1em;
     border-radius: var(--rad);
     background-color: var(--primary-bg);
+    box-sizing: border-box;
 }
 
 /* NAVBAR */
@@ -176,7 +177,7 @@ nav i.fa-circle-user {
 
 .object img.object-banner {
     height: 100%;
-    max-width: 100%;
+    width: 100%;
     object-fit: cover;
     border-radius: var(--rad) var(--rad) 0px 0px;
 }
@@ -283,11 +284,11 @@ nav i.fa-circle-user {
 }
 
 .object-content {
-    flex: 70%
+    width: calc(40vw - var(--pdd));
 }
 
 .object-content h3 {
-    margin: var(--pdd) 0px calc(var(--pdd) / 2) 0px;
+    margin: calc(var(--pdd) * 1.5) 0px calc(var(--pdd) / 2) 0px;
 }
 
 .object-content li {
@@ -316,11 +317,13 @@ nav i.fa-circle-user {
 }
 
 .object-actions {
-    flex: 30%;
-    margin: calc(var(--pdd) * -5) calc(var(--pdd) * -2) 0px 0px;
+    margin-top: calc(var(--pdd) * -5);
     background-color: var(--primary-bg);
     border-radius: var(--rad) var(--rad) 0px 0px;
     padding: var(--pdd);
+    position: fixed;
+    right: 20vw;
+    width: calc(20vw - var(--pdd) * 3);
 }
 
 .object-actions h3:first-child {
@@ -409,4 +412,67 @@ nav i.fa-circle-user {
 .review-modal textarea {
     height: calc(var(--pdd) * 5);
     margin-bottom: calc(var(--pdd) / 2);
+}
+
+.review-section {
+    margin-top: calc(var(--pdd) * 1.5);
+}
+
+.review-section .review {
+    border: 2px solid var(--secondary-bg);
+    box-sizing: border-box;
+    padding: calc(var(--pdd) / 2);
+    border-radius: var(--rad);
+}
+.review-section .review p:first-child {
+    font-size: 12px;
+    margin-top: 0px 0px calc(var(--pdd) / 4) 0px;
+}
+.review-section .review p:last-child {
+    margin: calc(var(--pdd) / 4) 0px 0px 0px;
+}
+
+@media screen and (max-width: 700px) {
+    /* NAV */
+    nav {
+        width: 100%;
+        top: 0px;
+        border-radius: 0px 0px var(--rad) var(--rad);
+    }
+
+    .options.active i {
+        background-color: var(--primary-bg);
+        padding: calc(var(--pdd) / 5);
+    }
+
+    .options.active i.fa-list {
+        margin-top: calc(var(--pdd) * 1);
+        margin-left: calc(var(--pdd) / -5);
+    }
+
+    .options.active i.fa-heart {
+        margin-top: calc(var(--pdd) * 2);
+        margin-left: calc(var(--pdd) / -5);
+    }
+
+    .options.active i.fa-gear {
+        margin-top: calc(var(--pdd) * 3);
+        margin-left: calc(var(--pdd) / -5);
+        border-radius: 0px 0px var(--rad) var(--rad);
+    }
+
+    /* OBJECTS */
+    .object:hover {
+        transform: scale(1.05);
+    }
+
+    /* PREVIEW */
+    .object-preview {
+        width: 100vw;
+        margin: 0px;
+    }
+
+    .object-actions {
+        right: 0px;
+    }
 }

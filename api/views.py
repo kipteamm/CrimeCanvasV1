@@ -133,3 +133,30 @@ def add_review(request):
     game.reviews.add(review)
 
     return JsonResponse(review.to_dict())
+
+
+@decorators.authenticated(required=False)
+def get_reviews(request, id):
+    game = models.Game.objects.filter(id=id).prefetch_related('reviews')
+
+    if not game.exists():
+        return JsonResponse({'error' : 'No game with that id.'}, status=404)
+    
+    cache_key = f'reviews_{id}'
+    cache_data = cache.get(cache_key)
+
+    if cache_data:
+        return JsonResponse(cache_data)
+
+    game = game.first()
+
+    response = []
+
+    for review in game.reviews.all(): # type: ignore
+        response.append(review.to_dict())
+
+    data = {'reviews' : response}
+
+    cache.set(cache_key, cache_data, timeout=600)
+
+    return JsonResponse(data)

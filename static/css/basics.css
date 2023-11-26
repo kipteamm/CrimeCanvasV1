@@ -128,3 +128,25 @@ input.primary {
 ::-webkit-scrollbar {
     width: 0px;
 }
+
+@media screen and (max-width: 1100px) {
+    .content {
+        width: 100%;
+        padding: calc(var(--pdd) * 3) calc(var(--pdd) / 2);
+        box-sizing: border-box;
+    }
+
+    .object {
+        flex: 0 0 calc(50% - var(--pdd));
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .object {
+        flex: 100%;
+    }
+
+    footer {
+        text-align: center;
+    }
+}
