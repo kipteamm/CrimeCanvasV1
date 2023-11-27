@@ -43,13 +43,6 @@ class Review(models.Model):
         return round(overall_rating, 2)
 
     def to_dict(self, user=None) -> dict:
-        """
-            'story' : self.story,
-            'fun' : self.gameplay,
-            'difficulty' : self.difficulty,
-            'enjoyment' : self.enjoyment,
-        """
-
         writer = False
 
         if user:
@@ -86,8 +79,8 @@ class Game(models.Model):
             'title': self.title,
             'description': self.description,
             'time': self.time,
-            'languages': json.loads(self.languages),
-            'player_amounts': json.loads(self.player_amounts),
+            'languages': self.languages,
+            'player_amounts': self.player_amounts,
             'age': f'{self.age}+',
             'themes': self.themes,
             'tested': self.tested,
@@ -149,11 +142,11 @@ class SpecificGame(models.Model):
     id = snowflakes.SnowflakeIDField(primary_key=True, unique=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
-    languages = models.CharField(max_length=256)
+    language = models.CharField(max_length=256)
     player_amount = models.IntegerField()
     age = models.IntegerField()
 
-    testing = models.BooleanField(default=False)
+    testing = models.BooleanField()
 
     def to_dict(self) -> dict:
         return {
@@ -161,7 +154,7 @@ class SpecificGame(models.Model):
             'title': self.game.title,
             'description': self.game.description,
             'time': self.game.time,
-            'language': self.languages,
+            'language': self.language,
             'player_amount': self.player_amount,
             'age': f'{self.age}+',
             'themes': self.game.themes,

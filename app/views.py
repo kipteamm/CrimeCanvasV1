@@ -19,10 +19,10 @@ def create_object(request):
         title="A murder mystery title",
         description="A very long and interesting description about the murder mystery",
         time=160,
-        languages=json.dumps(['english', 'dutch']),
-        player_amounts=json.dumps([9, 11, 13]),
+        languages=['english', 'dutch'],
+        player_amounts=[9, 11, 13],
         age=18,
-        themes=json.dumps(['Violence', 'Drugs', 'Alcohol', 'War', 'Relationships'])
+        themes=['Violence', 'Drugs', 'Alcohol', 'War', 'Relationships'],
     )
 
     return render(request, 'app/create_object.html')

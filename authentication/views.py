@@ -83,9 +83,7 @@ def login(request):
 
 
 def test(request):
-    game = Game.objects.get(id="7133166584499015680")
-
-    game.tested = True
-    game.save()
+    for game in Game.objects.all():
+        game.delete()
 
     return HttpResponse('success')

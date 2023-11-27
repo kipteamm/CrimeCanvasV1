@@ -55,7 +55,9 @@ def get_object(request, id):
 
 @decorators.authenticated()
 def toggle_wishlist(request):
-    game_id = json.loads(request.body.decode('utf-8')).get('id')
+    body = json.loads(request.body.decode('utf-8'))
+
+    game_id = body.get('id')
 
     if not game_id:
         return JsonResponse({'error' : 'No game id provided.'}, status=400)
