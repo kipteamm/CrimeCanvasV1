@@ -83,18 +83,9 @@ def login(request):
 
 
 def test(request):
-    ids = ['7133166578358554624', '7133166584499015680', '7133166594351435776']
+    game = Game.objects.get(id="7133166584499015680")
 
-    cnt = 0
-
-    for game in Game.objects.all():
-        if cnt > 2:
-            game.delete()
-        
-        game.id = ids[cnt]
-        
-        game.save()
-
-        cnt += 1
+    game.tested = True
+    game.save()
 
     return HttpResponse('success')

@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from django.http import JsonResponse
 
-from utils import decorators
+from utils import decorators, functions
 
 from app import models
 
@@ -74,7 +74,9 @@ def toggle_wishlist(request):
 
 @decorators.authenticated()
 def test_game(request):
-    game_id = json.loads(request.body.decode('utf-8')).get('id')
+    body = json.loads(request.body.decode('utf-8'))
+
+    game_id = body.get('id')
 
     if not game_id:
         return JsonResponse({'error' : 'No game id provided.'}, status=400)
@@ -82,14 +84,16 @@ def test_game(request):
     game = models.Game.objects.get(id=game_id)
     user = request.user
 
-    if user.collection.filter(id=game.id).exists():
+    specific_game = functions.get_specific_game(game, body.get('players'), body.get('language'), True)
+
+    if user.collection.filter(id=specific_game.id).exists():
         return JsonResponse({'error' : 'You are already testing this game.'}, status=403)
 
     if time.time() - user.last_test_timestamp < 2628000:
         return JsonResponse({'error' : 'You have to wait 30 days before you can test again.'}, status=403)
     
     user.last_test_timestamp = time.time()
-    user.collection.add(game)
+    user.collection.add(specific_game)
     user.save()
 
     return JsonResponse({'success' : True})
@@ -160,3 +164,25 @@ def get_reviews(request, id):
     cache.set(cache_key, cache_data, timeout=600)
 
     return JsonResponse(data)
+
+
+@decorators.authenticated()
+def add_cart(request):
+    body = json.loads(request.body.decode('utf-8'))
+
+    game_id = body.get('id')
+
+    if not game_id:
+        return JsonResponse({'error' : 'No game id provided.'}, status=400)
+
+    game = models.Game.objects.get(id=game_id)
+    user = request.user
+
+    specific_game = functions.get_specific_game(game, body.get('players'), body.get('language'), False)
+
+    if user.cart.filter(id=specific_game.id).exists():
+        return JsonResponse({'error' : 'You have already added this game to your cart.'}, status=403)
+    
+    user.cart.add(specific_game)
+
+    return JsonResponse({'success' : True})

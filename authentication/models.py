@@ -2,7 +2,7 @@ from django.db import models
 
 from utils import snowflakes
 
-from app.models import Game
+from app.models import Game, SpecificGame
 
 
 class User(models.Model):
@@ -15,8 +15,9 @@ class User(models.Model):
 
     token = models.CharField(max_length=255, null=True, blank=True)
 
+    cart = models.ManyToManyField(SpecificGame, related_name="user_cart")
     wishlist = models.ManyToManyField(Game, related_name="user_wishlist")
-    collection = models.ManyToManyField(Game, related_name="user_collection")
+    collection = models.ManyToManyField(SpecificGame, related_name="user_collection")
 
     # Permissions
     permissions = models.IntegerField(default=1)

@@ -6,6 +6,21 @@ from utils import snowflakes
 import json
 
 
+def _overall_ratings(reviews: QuerySet, rating_type: str) -> float:
+    if rating_type == 'total':
+        individual_ratings = [review._overall_rating() for review in reviews]
+    
+    else:
+        individual_ratings = [getattr(review, rating_type) for review in reviews]
+
+    if len(individual_ratings) == 0:
+        return 0
+
+    overall_rating = sum(individual_ratings) / len(individual_ratings)
+
+    return round(overall_rating, 2)
+
+
 class Review(models.Model):
     id = snowflakes.SnowflakeIDField(primary_key=True, unique=True)
 
@@ -130,16 +145,25 @@ class Game(models.Model):
         return ratings
     
 
-def _overall_ratings(reviews: QuerySet, rating_type: str) -> float:
-    if rating_type == 'total':
-        individual_ratings = [review._overall_rating() for review in reviews]
-    
-    else:
-        individual_ratings = [getattr(review, rating_type) for review in reviews]
+class SpecificGame(models.Model):
+    id = snowflakes.SnowflakeIDField(primary_key=True, unique=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
-    if len(individual_ratings) == 0:
-        return 0
+    languages = models.CharField(max_length=256)
+    player_amount = models.IntegerField()
+    age = models.IntegerField()
 
-    overall_rating = sum(individual_ratings) / len(individual_ratings)
+    testing = models.BooleanField(default=False)
 
-    return round(overall_rating, 2)
+    def to_dict(self) -> dict:
+        return {
+            'id': self.id,
+            'title': self.game.title,
+            'description': self.game.description,
+            'time': self.game.time,
+            'language': self.languages,
+            'player_amount': self.player_amount,
+            'age': f'{self.age}+',
+            'themes': self.game.themes,
+            'testing' : self.testing,
+        }

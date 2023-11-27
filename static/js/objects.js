@@ -342,3 +342,29 @@ function generateScore(total) {
         }
     }
 }
+
+async function addToCart() {
+    const url = `api/cart/add`;
+
+    const data = {
+        id : objectID,
+        price : parseInt(document.getElementById('price').innerText),
+        language : document.querySelector('.languages').querySelector('.active').id
+    }
+
+    const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": getCookie("au_id"),
+            'X-CSRFToken': document.cookie.match(/csrftoken=([^ ;]+)/)[1],
+        },
+    });
+
+    if (!response.ok) { 
+        sendAlert('Failed to add to cart')
+
+        return
+    }
+}
