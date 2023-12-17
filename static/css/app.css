@@ -216,9 +216,6 @@ nav i.fa-circle-user {
 .object .actions span:first-child i {
     margin-right: calc(var(--pdd) / 4);
 }
-.object .actions span:last-child {
-    float: right;
-}
 
 .object .actins i {
     transition: .3s;
@@ -325,7 +322,6 @@ nav i.fa-circle-user {
     right: 20vw;
     width: calc(20vw - var(--pdd) * 3);
     transition: .3s;
-    bottom: 0px;
 }
 
 .object-actions h3:first-child {

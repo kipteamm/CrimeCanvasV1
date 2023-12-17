@@ -86,7 +86,7 @@ def test_game(request):
     game = models.Game.objects.get(id=game_id)
     user = request.user
 
-    specific_game = functions.get_specific_game(game, body.get('players'), body.get('language'), True)
+    specific_game = functions.get_specific_game(game, 0, 'english', True)
 
     if user.collection.filter(id=specific_game.id).exists():
         return JsonResponse({'error' : 'You are already testing this game.'}, status=403)
@@ -95,6 +95,10 @@ def test_game(request):
         return JsonResponse({'error' : 'You have to wait 30 days before you can test again.'}, status=403)
     
     user.last_test_timestamp = time.time()
+
+    if user.wishlist.filter(id=game.id).exists():
+        user.wishlist.remove(game)
+
     user.collection.add(specific_game)
     user.save()
 
@@ -180,7 +184,7 @@ def add_cart(request):
     game = models.Game.objects.get(id=game_id)
     user = request.user
 
-    specific_game = functions.get_specific_game(game, body.get('players'), body.get('language'), False)
+    specific_game = functions.get_specific_game(game, body.get('player_amount'), body.get('language'), False)
 
     if user.cart.filter(id=specific_game.id).exists():
         return JsonResponse({'error' : 'You have already added this game to your cart.'}, status=403)

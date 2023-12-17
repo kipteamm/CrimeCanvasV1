@@ -4,21 +4,39 @@ function createObject(object) {
     const wrapper = document.createElement('div');
 
     let players = '';
-
-    object.player_amounts.forEach(player => {
-        players += `<span class="tag"><i class="fa-solid fa-users"></i>${player}</span>`
-    })
-
     let languages = '';
+    let actions = '';
 
-    object.languages.forEach(language => {
-        languages += '<img class="flag" src="/static/images/flags/' + language + '.svg">'
-    })
+    console.log(object)
 
-    isWishlisted = 'regular'
+    if (object.owned) {
+        if (object.tested) {
+            players = `<span class="tag"><i class="fa-solid fa-user"></i>${object.player_amount}</span>`
+        }
+        languages = `<img class="flag" src="/static/images/flags/${object.language}.svg">`
 
-    if (object.wishlisted) {
-        isWishlisted = 'solid'
+        actions = `
+            <span>Owned</span>
+        `
+    } else {
+        object.player_amounts.forEach(player => {
+            players += `<span class="tag"><i class="fa-solid fa-users"></i>${player}</span>`
+        })
+    
+        object.languages.forEach(language => {
+            languages += `<img class="flag" src="/static/images/flags/${language}.svg">`
+        })
+
+        isWishlisted = 'regular'
+
+        if (object.wishlisted) {
+            isWishlisted = 'solid'
+        }
+
+        actions = `
+            <span><i class="fa-solid fa-star"></i>${object.rating}</span>
+            <span style="float: right;"><i class="fa-${isWishlisted} fa-heart" onclick="wishlist('${object.id}')"></i></span>
+        `
     }
 
     wrapper.id = object.id;
@@ -45,8 +63,7 @@ function createObject(object) {
             ${languages}
 
             <div class="actions">
-                <span><i class="fa-solid fa-star"></i>${object.rating}</span>
-                <span><i class="fa-${isWishlisted} fa-heart" onclick="wishlist('${object.id}')"></i></span>
+                ${actions}
             </div>
         </div>
     `
@@ -84,6 +101,8 @@ async function viewObject(objectID) {
     currentObject = objectID
 
     const objectData = await getFromApi(`/api/object/${objectID}/`)
+
+    console.log(objectData)
 
     preview.querySelector('.object-banner').src = `/static/game/${objectData.id}/banner.jpg`
 
@@ -311,7 +330,7 @@ async function test(objectID) {
     const url = `api/object/test`;
 
     const data = {
-        id : objectID
+        id : objectID,
     }
 
     const response = await fetch(url, {
@@ -324,11 +343,13 @@ async function test(objectID) {
         },
     });
 
-    if (!response.ok) { 
+    if (!response.ok) {
+        console.log(await response.json())
+        
         return
     }
 
-    const buyButton = document.getElementById(objectID).querySelector('.buy-button')
+    const buyButton = document.getElementById(`preview-${objectID}`).querySelector('.buy-button')
 
     buyButton.innerText = 'Owned (see collection)'
     buyButton.setAttribute('onclick', 'loadObjects("collection")')
@@ -360,8 +381,6 @@ async function addToCart() {
 
     const data = {
         id : objectID,
-        price : parseInt(document.getElementById('price').innerText),
-        language : document.querySelector('.languages').querySelector('.active').id
     }
 
     const response = await fetch(url, {

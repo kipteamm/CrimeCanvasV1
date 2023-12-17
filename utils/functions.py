@@ -31,13 +31,13 @@ def logged_in(request: HttpRequest) -> bool:
     return User.objects.filter(token=request.COOKIES.get('au_id')).exists()
 
 
-def get_specific_game(game: Game, players: int, language: str, testing: bool) -> SpecificGame:
-    specific_game = SpecificGame.objects.filter(game=game, players=players, language=language).select_related('game')
+def get_specific_game(game: Game, player_amount: int, language: str, testing: bool) -> SpecificGame:
+    specific_game = SpecificGame.objects.filter(game=game, player_amount=player_amount, language=language).select_related('game')
 
     if not specific_game.exists():
         specific_game = SpecificGame.objects.create(
             game=game, 
-            players=players, 
+            player_amount=player_amount, 
             language=language,
             testing=testing
         )

@@ -142,22 +142,28 @@ class SpecificGame(models.Model):
 
     language = models.CharField(max_length=256)
     player_amount = models.IntegerField()
-    age = models.IntegerField()
 
     testing = models.BooleanField()
 
-    def to_dict(self) -> dict:
-        return {
-            'id': self.id,
+    def to_dict(self, user=None, attach_reviews: bool=False) -> dict:
+        data = {
+            'id': self.game.id,
             'title': self.game.title,
             'description': self.game.description,
             'time': self.game.time,
             'language': self.language,
             'player_amount': self.player_amount,
-            'age': f'{self.age}+',
+            'age': f'{self.game.age}+',
             'themes': self.game.themes,
             'testing' : self.testing,
         }
+
+        if user:
+            data.update({
+                'owned': user.collection.filter(id=self.id).exists(),
+            })
+
+        return data
     
 # AUTHENTICATION
     
