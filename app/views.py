@@ -16,13 +16,14 @@ def index(request):
 def create_object(request):
 
     Game.objects.create(
-        title="A murder mystery title",
+        title="An awesome murder mystery",
         description="A very long and interesting description about the murder mystery",
         time=160,
         languages=['english', 'dutch'],
-        player_amounts=[9, 11, 13],
+        player_amounts=[8, 10],
         age=18,
-        themes=['Violence', 'Drugs', 'Alcohol', 'War', 'Relationships'],
+        themes=['Violence', 'Alcohol', 'Relationships'],
+        tested=True
     )
 
     return render(request, 'app/create_object.html')

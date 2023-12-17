@@ -1,9 +1,7 @@
 from django.http import HttpRequest
 from django.urls import resolve
 
-from authentication import models
-
-from app.models import Game, SpecificGame
+from app.models import Game, SpecificGame, User
 
 from hashlib import sha512
 
@@ -30,7 +28,7 @@ def path_exists(path: str) -> bool:
     
 
 def logged_in(request: HttpRequest) -> bool:
-    return models.User.objects.filter(token=request.COOKIES.get('au_id')).exists()
+    return User.objects.filter(token=request.COOKIES.get('au_id')).exists()
 
 
 def get_specific_game(game: Game, players: int, language: str, testing: bool) -> SpecificGame:

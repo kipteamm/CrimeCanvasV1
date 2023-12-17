@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 
-from authentication.models import User
+from app.models import User
 
 from app.models import Game
 
@@ -83,7 +83,11 @@ def login(request):
 
 
 def test(request):
-    for game in Game.objects.all():
-        game.delete()
+    for user in User.objects.all():
+        user.permissions = 2
+        user.save()
+    
+    #for game in Game.objects.all():
+    #    game.delete()
 
     return HttpResponse('success')

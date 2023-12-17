@@ -29,6 +29,7 @@ body {
     background-color: var(--primary-bg);
     color: var(--primary-font-clr);
     font-family: var(--primary-font);
+    box-sizing: border-box;
 }
 
 a {
@@ -42,6 +43,7 @@ h3 {
 
 p {
     margin-bottom: calc(var(--pdd) / 2);
+    word-wrap: break-word;
 }
 
 .content {
@@ -135,17 +137,9 @@ input.primary {
         padding: calc(var(--pdd) * 3) calc(var(--pdd) / 2);
         box-sizing: border-box;
     }
-
-    .object {
-        flex: 0 0 calc(50% - var(--pdd));
-    }
 }
 
 @media screen and (max-width: 700px) {
-    .object {
-        flex: 100%;
-    }
-
     footer {
         text-align: center;
     }

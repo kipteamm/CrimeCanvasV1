@@ -1,3 +1,5 @@
+let mobileActionsActive = false
+
 function createObject(object) {
     const wrapper = document.createElement('div');
 
@@ -69,6 +71,7 @@ async function viewObject(objectID) {
     preview.style.bottom = '0';
 
     overlay.classList.add('active')
+    preview.classList.add('active')
 
     document.body.style.overflowY = 'hidden';
 
@@ -92,7 +95,7 @@ async function viewObject(objectID) {
 
     preview.querySelector('.object-content').innerHTML = `
         <h1>${objectData.title}</h1>
-        <p>${objectData.description}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+        <p>${objectData.description}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
 
         <h3>Specifications</h3>
         <ul>
@@ -211,8 +214,17 @@ async function viewObject(objectID) {
 }
 
 function closePreview() {
+    if (mobileActionsActive) {
+        toggleActions(document.querySelector('.mobile-action')) 
+
+        return
+    }
+
     preview.style.bottom = '-100vh';
+    preview.classList.remove('active')
+
     overlay.classList.remove('active')
+
     document.body.style.overflowY = 'scroll'
 }
 
@@ -366,5 +378,37 @@ async function addToCart() {
         sendAlert('Failed to add to cart')
 
         return
+    }
+}
+
+function toggleActions(button) {
+    const objectActions = document.querySelector('.object-actions');
+
+    if (objectActions.classList.contains('active')) {
+        mobileActionsActive = false
+
+        objectActions.style.bottom = '-100%';
+
+        button.innerHTML = '<i class="fa-solid fa-cart-shopping" id="mobile-action"></i>'
+    } else {
+        mobileActionsActive = true
+
+        objectActions.style.bottom = '0px';
+
+        button.innerHTML = '<i class="fa-solid fa-xmark"></i>'
+    }
+        
+    objectActions.classList.toggle('active');
+}
+
+window.onclick = function(e) {
+    if (mobileActionsActive === true) {
+        if (e.target.id === 'mobile-action') {
+            return
+        }
+
+        if (e.target.closest('.object-actions') === null) {
+            toggleActions(document.querySelector('.mobile-action'))
+        }
     }
 }
